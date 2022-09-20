@@ -56,6 +56,15 @@
     sukebei.setAttribute("href", "https://sukebei.nyaa.si/?q=" + javl_bango);
     sukebei.innerText = "Sekubei";
     javl_title.append(sukebei);
+
+    // btn: dmm
+    var title = document.querySelector("#video_title h3 a").innerText.replace(/\w+-\d+\s/, "");
+    var dmm = document.createElement("a");
+    dmm.setAttribute("class", "smallbutton");
+    dmm.setAttribute("target", "_blank");
+    dmm.setAttribute("href", "https://www.dmm.co.jp/digital/videoa/-/list/search/=/?searchstr=" + title);
+    dmm.innerText = "dmm";
+    javl_title.append(dmm);
   } catch {}
 })();
 

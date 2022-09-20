@@ -93,6 +93,15 @@
     autofill.setAttribute("href", 'https://kp.m-team.cc/upload.php#fillinfo={"javl_bango":"' + javl_bango + '","title":"' + ori_title + '","description":"\n[img]'+ img +'[/img]\n"}');
     autofill.innerText = "upload";
     javl_title.append(autofill);
+
+    // btn: dmm
+    var title = document.querySelector("#video_title h3 a").innerText.replace(/\w+-\d+\s/, "");
+    var dmm = document.createElement("a");
+    dmm.setAttribute("class", "smallbutton");
+    dmm.setAttribute("target", "_blank");
+    dmm.setAttribute("href", "https://www.dmm.co.jp/digital/videoa/-/list/search/=/?searchstr=" + title);
+    dmm.innerText = "dmm";
+    javl_title.append(dmm);
   } catch {}
 
   try {
