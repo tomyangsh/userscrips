@@ -24,3 +24,13 @@ for (i of document.querySelector("#list").children) {
   javlib_span.append(javlib);
   i.querySelector("p.sublink").prepend(javlib_span);
 }
+
+var arr = document.querySelector("#list").children;
+var len = arr.length;
+for (var i = 0; i < len - 1; i++) {
+        for (var j = 0; j < len - 1 - i; j++) {
+            if (arr[j].querySelector("p.sublink span a").innerText > arr[j+1].querySelector("p.sublink span a").innerText) {
+               arr[j].parentNode.insertBefore(arr[j], arr[j+2]);
+            }
+        }
+    }
