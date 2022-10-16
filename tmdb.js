@@ -33,8 +33,10 @@ xhttp.onreadystatechange = function() {
         }
       }
       zh_names = Array.from(zh_names).join('/');
-      document.querySelector('h2 a').innerText = zh_names;
-      document.querySelector('h2 a').style = "font-size: 30px;";
+      if (zh_names) {
+        document.querySelector('h2 a').innerText = zh_names;
+        document.querySelector('h2 a').style = "font-size: 30px;";
+      }
     }
 };
 xhttp.open("GET", url, true);
