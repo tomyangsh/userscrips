@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name                    JAV Library Assistant
-// @version                 1.0
-// @include                 *://www.javlibrary.com/*/?v=*
-// @include                 https://kp.m-team.cc/upload.php#fillinfo=*
-// @require                 https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @grant                   none
-// @license                 MIT
+// @name        JAV Library Assistant
+// @namespace	https://github.com/tomyangsh/userscrips
+// @version     1.0
+// @include     *://www.javlibrary.com/*/?v=*
+// @include     https://kp.m-team.cc/upload.php#fillinfo=*
+// @grant       none
 // ==/UserScript==
+
 (function () {
   "use strict";
 
@@ -43,24 +43,6 @@
     var javl_title = document.querySelector("#video_title h3.post-title.text");
     var ori_title = javl_title.innerText;
     var img = document.querySelector("#video_jacket_img").src;
-
-    // btn: copy title
-    var javl_copy_button = document.createElement("button");
-    javl_copy_button.setAttribute("class", "copy smallbutton");
-    javl_copy_button.setAttribute(
-      "data-clipboard-target",
-      "#video_title > h3 > a"
-    );
-    javl_copy_button.innerText = "COPY TITLE";
-    javl_title.append(javl_copy_button);
-
-    // btn: copy bango
-    var javl_copy_bango = document.querySelector("#video_id table");
-    javl_copy_bango.setAttribute("class", "copy");
-    javl_copy_bango.setAttribute(
-      "data-clipboard-target",
-      "#video_id > table > tbody > tr > td.text"
-    );
 
     // btn: javbus
     var javbus = document.createElement("a");
@@ -119,21 +101,5 @@
     document.getElementsByName("uplver")[0].checked=true;
     document.getElementsByClassName("codebuttons")[0].click();
   } catch {}
-  
-  var clipboard = new ClipboardJS(".copy");
 
-  clipboard.on("success", function (e) {
-    console.info("Action:", e.action);
-    console.info("Text:", e.text);
-    console.info("Trigger:", e.trigger);
-
-    e.clearSelection();
-  });
-
-  clipboard.on("error", function (e) {
-    console.error("Action:", e.action);
-    console.error("Trigger:", e.trigger);
-  });
 })();
-
-

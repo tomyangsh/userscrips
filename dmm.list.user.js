@@ -1,8 +1,12 @@
 // ==UserScript==
 // @name        dmm - list
-// @match       https://www.dmm.co.jp/digital/videoa/-/list/*
+// @namespace   https://github.com/tomyangsh/userscrips
+// @include     https://www.dmm.co.jp/digital/videoa/-/list/*
 // @version     1.0
 // ==/UserScript==
+
+(function() {
+'use strict'
 
 for (i of document.querySelector("#list").children) {
   let cid = i.querySelector("div p.tmb a").href.match(/[a-z]+\d+/)[0];
@@ -15,3 +19,5 @@ for (i of document.querySelector("#list").children) {
   javlib_span.append(javlib);
   i.querySelector("p.sublink").prepend(javlib_span);
 }
+
+})()

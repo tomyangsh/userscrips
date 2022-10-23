@@ -1,9 +1,13 @@
 // ==UserScript==
-// @name        TMDB
-// @match       https://www.themoviedb.org/movie/*
-// @match       https://www.themoviedb.org/tv/*
-// @version     1.0
+// @name    	TMDB
+// @namespace   https://github.com/tomyangsh/userscrips
+// @include   	https://www.themoviedb.org/movie/*
+// @include   	https://www.themoviedb.org/tv/*
+// @version   	1.0
 // ==/UserScript==
+
+(function() {
+'use strict'
 
 var trakt_url = 'https://trakt.tv/search/tmdb?query='+/\d+/.exec(document.baseURI)[0];
 var social_links = document.getElementsByClassName("social_links")[0];
@@ -21,23 +25,25 @@ let url = 'https://api.themoviedb.org/3/' + cat + '/'+ id + '/translations?api_k
 let zh_names = new Set();
 let xhttp  = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      let translations = JSON.parse(xhttp.responseText).translations;
-      for (let translation of translations) {
-        if (translation.iso_639_1 == 'zh') {
-          if (translation.data.name) {
-            zh_names.add(translation.data.name);
-          } else if (translation.data.title) {
-            zh_names.add(translation.data.title);
-          }
-        }
-      }
-      zh_names = Array.from(zh_names).join('/');
-      if (zh_names) {
-        document.querySelector('h2 a').innerText = zh_names;
-        document.querySelector('h2 a').style = "font-size: 30px;";
+  if (this.readyState == 4 && this.status == 200) {
+    let translations = JSON.parse(xhttp.responseText).translations;
+    for (let translation of translations) {
+    if (translation.iso_639_1 == 'zh') {
+      if (translation.data.name) {
+      zh_names.add(translation.data.name);
+      } else if (translation.data.title) {
+      zh_names.add(translation.data.title);
       }
     }
+    }
+    zh_names = Array.from(zh_names).join('/');
+    if (zh_names) {
+    document.querySelector('h2 a').innerText = zh_names;
+    document.querySelector('h2 a').style = "font-size: 30px;";
+    }
+  }
 };
 xhttp.open("GET", url, true);
 xhttp.send();
+
+})()

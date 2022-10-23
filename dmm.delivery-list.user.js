@@ -1,16 +1,20 @@
 // ==UserScript==
 // @name        dmm - delivery-list
-// @match       https://www.dmm.co.jp/digital/videoa/-/delivery-list/*
+// @namespace   https://github.com/tomyangsh/userscrips
+// @include     https://www.dmm.co.jp/digital/videoa/-/delivery-list/*
 // @version     1.0
 // ==/UserScript==
+
+(function() {
+'use strict'
 
 for (i of document.querySelector("#list").children) {
   i.style = "width: 147px;";
   i.querySelector("div p.tmb a span img").style.maxWidth = "1000px";
   i.querySelector("div p.tmb a span img").style.maxHeight = "1000px";
   try {
-  i.querySelector("div p.sample").style.top = "202px";
-  i.querySelector("div p.sample").style.left = "32%";
+    i.querySelector("div p.sample").style.top = "202px";
+    i.querySelector("div p.sample").style.left = "32%";
   } catch {}
   let img = i.querySelector("div p.tmb a span img").src.replace("pt.jpg", "ps.jpg");
   i.querySelector("div p.tmb a span img").src = img;
@@ -28,9 +32,11 @@ for (i of document.querySelector("#list").children) {
 var arr = document.querySelector("#list").children;
 var len = arr.length;
 for (var i = 0; i < len - 1; i++) {
-        for (var j = 0; j < len - 1 - i; j++) {
-            if (arr[j].querySelector("p.sublink span a").innerText > arr[j+1].querySelector("p.sublink span a").innerText) {
-               arr[j].parentNode.insertBefore(arr[j], arr[j+2]);
-            }
-        }
+  for (var j = 0; j < len - 1 - i; j++) {
+    if (arr[j].querySelector("p.sublink span a").innerText > arr[j+1].querySelector("p.sublink span a").innerText) {
+       arr[j].parentNode.insertBefore(arr[j], arr[j+2]);
     }
+  }
+}
+
+})()
