@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.0
+// @version     1.0.1
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -57,7 +57,7 @@
     sukebei.setAttribute("class", "smallbutton");
     sukebei.setAttribute("target", "_blank");
     sukebei.setAttribute("href", "https://sukebei.nyaa.si/?q=" + javl_bango);
-    sukebei.innerText = "Sekubei";
+    sukebei.innerText = "Sukebei";
     javl_title.append(sukebei);
     
     // btn: m-team
