@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
-// @version   	1.0
+// @version   	1.0.1
 // ==/UserScript==
 
 (function() {
@@ -18,7 +18,7 @@ var img = trakt_link.appendChild(document.createElement("img"));
 img.src = "https://www.tomyangsh.pw/dav/trakt-icon-red-white.svg";
 img.width = 30;
 
-let m = location.pathname.match(/\/(\w+)\/(\d+)\-\w+/);
+let m = location.pathname.match(/\/(\w+)\/(\d+)/);
 let cat = m[1];
 let id = m[2];
 let url = 'https://api.themoviedb.org/3/' + cat + '/'+ id + '/translations?api_key=f090bb54758cabf231fb605d3e3e0468';
