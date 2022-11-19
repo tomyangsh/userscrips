@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.0.1
+// @version     1.1.0
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -14,19 +14,30 @@
     var javl_bango = document.querySelector("#video_id table tbody tr td.text");
   } catch {}
 
-  try {
-    var pid = document.getElementsByClassName("btn_videoplayer").valueOf()[0].attributes[1].value;
-    var parent = document.getElementsByClassName("previewthumbs")[0];
-    while (parent.firstChild) {
-      parent.removeChild(parent.firstChild);
+  var pid = document.getElementsByName("keywords")[0].content.match(/[a-z]+\d+/)[0];
+  var parent = document.getElementsByClassName("socialmedia")[0];
+  parent.style = "height: 360px; text-align: left;";
+  var preview = document.createElement("video");
+  preview.width = 640;
+  preview.height = 360;
+  preview.setAttribute("controls", true);
+  var source = document.createElement("source");
+  source.type = "video/mp4"
+  let xhttp  = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      let src = this.responseURL;
+      console.log(src);
+      if (src) {
+        source.src = src;
+        preview.appendChild(source);
+        parent.replaceChildren(preview);
+      }
     }
-    var preview = parent.appendChild(document.createElement("iframe"));
-    preview.src = "https://www.dmm.co.jp/service/digitalapi/-/html5_player/=/cid="+pid+"/mtype=CARdWwNE/service=digital/floor=videoa/mode=list/"
-    preview.width = 640;
-    preview.height = 360;
-    preview.allow = "fullscreen";
-    preview.scrolling = "no";
-  } catch {}
+  }
+  let url = `https://oracle.tomyangsh.pw/dmm/api/preview?cid=${pid}`;
+  xhttp.open("HEAD", url, true);
+  xhttp.send();
   
   try {
     // JAVLIBRARY
