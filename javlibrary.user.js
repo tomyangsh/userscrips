@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.1.0
+// @version     1.1.1
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -15,6 +15,7 @@
   } catch {}
 
   var pid = document.getElementsByName("keywords")[0].content.match(/[a-z]+\d+/)[0];
+  pid = pid.replace(pid.match(/\d+/)[0], pid.match(/\d+/)[0].padStart(3, '0'))
   var parent = document.getElementsByClassName("socialmedia")[0];
   parent.style = "height: 360px; text-align: left;";
   var preview = document.createElement("video");
