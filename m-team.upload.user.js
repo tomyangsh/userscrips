@@ -2,7 +2,7 @@
 // @name        mt upload
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     https://kp.m-team.cc/upload.php#info=*
-// @version     1.0
+// @version     1.1
 // @grant          none
 // ==/UserScript==
 
@@ -20,7 +20,8 @@ xhttp.onreadystatechange = function() {
     document.getElementsByName('codec_sel')[0].value = dic.code;
     document.getElementsByName('standard_sel')[0].value = dic.res;
     document.getElementsByName('processing_sel')[0].value = dic.area;
-    document.querySelector('#descr').value = dic.des
+    document.querySelector('#descr').value = dic.des;
+    document.querySelector("#l_sub").checked = dic.zhsub;
   }
 };
 xhttp.open("GET", url, true);
