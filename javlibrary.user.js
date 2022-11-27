@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.1.1
+// @version     1.1.2
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -10,34 +10,36 @@
 (function () {
   "use strict";
 
-  try {
-    var javl_bango = document.querySelector("#video_id table tbody tr td.text");
-  } catch {}
+  var javl_bango = document.querySelector("#video_id table tbody tr td.text");
 
-  var pid = document.getElementsByName("keywords")[0].content.match(/[a-z]+\d+/)[0];
-  pid = pid.replace(pid.match(/\d+/)[0], pid.match(/\d+/)[0].padStart(3, '0'))
   var parent = document.getElementsByClassName("socialmedia")[0];
-  parent.style = "height: 360px; text-align: left;";
-  var preview = document.createElement("video");
-  preview.width = 640;
-  preview.height = 360;
-  preview.setAttribute("controls", true);
-  var source = document.createElement("source");
-  source.type = "video/mp4"
   let xhttp  = new XMLHttpRequest();
+  var xhttp2 = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      let src = this.responseURL;
-      console.log(src);
-      if (src) {
-        source.src = src;
-        preview.appendChild(source);
-        parent.replaceChildren(preview);
-      }
+      var cid = this.responseText;
+      url = `https://oracle.tomyangsh.pw/dmm/api/preview?cid=${cid}`
+      xhttp2.open("HEAD", url, true);
+      xhttp2.send();
     }
   }
-  let url = `https://oracle.tomyangsh.pw/dmm/api/preview?cid=${pid}`;
-  xhttp.open("HEAD", url, true);
+  xhttp2.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      let src = this.responseURL;
+      var preview = document.createElement("video");
+      preview.width = 640;
+      preview.height = 360;
+      preview.setAttribute("controls", true);
+      var source = document.createElement("source");
+      source.type = "video/mp4";
+      source.src = src;
+      preview.appendChild(source);
+      parent.style = "height: 360px; text-align: left;";
+      parent.replaceChildren(preview);
+    }
+  }
+  let url = `https://oracle.tomyangsh.pw/dmm/api/getcid?pid=${javl_bango}`;
+  xhttp.open("GET", url, true);
   xhttp.send();
   
   try {
