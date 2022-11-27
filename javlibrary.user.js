@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.1.2
+// @version     1.1.3
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -10,7 +10,7 @@
 (function () {
   "use strict";
 
-  var javl_bango = document.querySelector("#video_id table tbody tr td.text");
+  var javl_bango = document.querySelector("#video_id table tbody tr td.text").innerText;
 
   var parent = document.getElementsByClassName("socialmedia")[0];
   let xhttp  = new XMLHttpRequest();
@@ -51,8 +51,6 @@
       .querySelector("#video_title h3.post-title.text a")
       .removeAttribute("href");
 
-    // bango
-    javl_bango = javl_bango.innerText;
     // title
     var javl_title = document.querySelector("#video_title h3.post-title.text");
     var ori_title = javl_title.innerText;
