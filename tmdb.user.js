@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
-// @version   	1.0.1
+// @version   	1.1
 // ==/UserScript==
 
 (function() {
@@ -21,25 +21,28 @@ img.width = 30;
 let m = location.pathname.match(/\/(\w+)\/(\d+)/);
 let cat = m[1];
 let id = m[2];
-let url = 'https://api.themoviedb.org/3/' + cat + '/'+ id + '/translations?api_key=f090bb54758cabf231fb605d3e3e0468';
+let url = 'https://oracle.tomyangsh.pw/ptinfo/api/detail?cat=' + cat + '&id=' + id;
 let zh_names = new Set();
 let xhttp  = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
-    let translations = JSON.parse(xhttp.responseText).translations;
-    for (let translation of translations) {
-    if (translation.iso_639_1 == 'zh') {
-      if (translation.data.name) {
-      zh_names.add(translation.data.name);
-      } else if (translation.data.title) {
-      zh_names.add(translation.data.title);
-      }
-    }
-    }
-    zh_names = Array.from(zh_names).join('/');
+    let result = JSON.parse(xhttp.responseText);
+    let zh_names = result.zh_names;
+
     if (zh_names) {
     document.querySelector('h2 a').innerText = zh_names;
     document.querySelector('h2 a').style = "font-size: 30px;";
+    }
+
+    let teamdrive_id = result.teamdrive_id;
+
+    if (teamdrive_id) {
+      let teamdrive_link = social_links.appendChild(document.createElement("a"));
+      teamdrive_link.href = `https://drive.google.com/file/d/${teamdrive_id}`;
+      teamdrive_link.target = "_blank";
+      var icon = teamdrive_link.appendChild(document.createElement("img"));
+      icon.src = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png"
+      icon.width = 30;
     }
   }
 };
