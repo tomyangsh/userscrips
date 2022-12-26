@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
-// @version   	1.1
+// @version   	1.2
 // ==/UserScript==
 
 (function() {
@@ -35,6 +35,7 @@ xhttp.onreadystatechange = function() {
     }
 
     let teamdrive_id = result.teamdrive_id;
+    let gdrive_id = result.gdrive_id;
 
     if (teamdrive_id) {
       let teamdrive_link = social_links.appendChild(document.createElement("a"));
@@ -42,6 +43,14 @@ xhttp.onreadystatechange = function() {
       teamdrive_link.target = "_blank";
       var icon = teamdrive_link.appendChild(document.createElement("img"));
       icon.src = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png"
+      icon.width = 30;
+    }
+    
+    if (gdrive_id) {
+      let gdrive_link = social_links.appendChild(document.createElement("a"));
+      gdrive_link.href = `mpv:https://drive.google.com/file/d/${gdrive_id}`;
+      var icon = gdrive_link.appendChild(document.createElement("img"));
+      icon.src = "https://mpv.io/images/mpv-logo-128-0baae5aa.png";
       icon.width = 30;
     }
   }
