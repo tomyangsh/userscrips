@@ -2,7 +2,7 @@
 // @name        mt upload
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     https://kp.m-team.cc/upload.php#info=*
-// @version     1.1
+// @version     1.1.1
 // @grant          none
 // ==/UserScript==
 
@@ -16,7 +16,7 @@ xhttp.onreadystatechange = function() {
     let dic = JSON.parse(xhttp.responseText);
     document.querySelector('#browsecat').value = dic.cat;
     document.getElementsByName('small_descr')[0].value = dic.name;
-    document.getElementsByName('url')[0].value = dic.imdb;
+    document.getElementsByName('url')[0].value = `https://www.imdb.com/title/${dic.imdb}/`;
     document.getElementsByName('codec_sel')[0].value = dic.code;
     document.getElementsByName('standard_sel')[0].value = dic.res;
     document.getElementsByName('processing_sel')[0].value = dic.area;
