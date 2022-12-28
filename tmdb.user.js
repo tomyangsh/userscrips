@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
-// @version   	1.3.1
+// @version   	1.3.2
 // ==/UserScript==
 
 (function() {
@@ -41,6 +41,7 @@ xhttp.onreadystatechange = function() {
     if (imdb) {
       let imdb_link = social_links.appendChild(document.createElement("a"));
       imdb_link.href = `https://www.imdb.com/title/${imdb}/`;
+      imdb_link.target = "_blank";
       var icon = imdb_link.appendChild(document.createElement("img"));
       icon.src = "https://oracle.tomyangsh.pw/imdb.svg";
       icon.width = 30;
