@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.1.3
+// @version     1.1.4
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -12,40 +12,35 @@
 
   var javl_bango = document.querySelector("#video_id table tbody tr td.text").innerText;
 
-  var parent = document.getElementsByClassName("socialmedia")[0];
+  var parent = document.getElementsByClassName("previewthumbs")[0];
   let xhttp  = new XMLHttpRequest();
-  var xhttp2 = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var cid = this.responseText;
-      url = `https://oracle.tomyangsh.pw/dmm/api/preview?cid=${cid}`
-      xhttp2.open("HEAD", url, true);
-      xhttp2.send();
+      let result = JSON.parse(this.responseText);
+      if (result.length && result[0].pid == javl_bango) {
+        document.querySelector("#video_date table tr td.text").innerText = result[0].date;
+        if (result[0].preview) {
+          let src = result[0].preview;
+          var preview = document.createElement("video");
+          preview.width = 640;
+          preview.height = 360;
+          preview.setAttribute("controls", true);
+          var source = document.createElement("source");
+          source.type = "video/mp4";
+          source.src = src;
+          preview.appendChild(source);
+          parent.style = "height: 360px; text-align: left;";
+          parent.replaceChildren(preview);
+        }
+      }
     }
   }
-  xhttp2.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      let src = this.responseURL;
-      var preview = document.createElement("video");
-      preview.width = 640;
-      preview.height = 360;
-      preview.setAttribute("controls", true);
-      var source = document.createElement("source");
-      source.type = "video/mp4";
-      source.src = src;
-      preview.appendChild(source);
-      parent.style = "height: 360px; text-align: left;";
-      parent.replaceChildren(preview);
-    }
-  }
-  let url = `https://oracle.tomyangsh.pw/dmm/api/getcid?pid=${javl_bango}`;
+  let url = `https://oracle.tomyangsh.pw/api/dmm?keyword=${javl_bango}`;
   xhttp.open("GET", url, true);
   xhttp.send();
-  
-  try {
-    // JAVLIBRARY
 
-    // misc
+  try {
+
     // remove title link
     document
       .querySelector("#video_title h3.post-title.text a")
@@ -71,7 +66,7 @@
     sukebei.setAttribute("href", "https://sukebei.nyaa.si/?q=" + javl_bango);
     sukebei.innerText = "Sukebei";
     javl_title.append(sukebei);
-    
+
     // btn: m-team
     var mteam = document.createElement("a");
     mteam.setAttribute("class", "smallbutton");
@@ -79,7 +74,7 @@
     mteam.setAttribute("href", "https://kp.m-team.cc/adult.php?search=" + javl_bango);
     mteam.innerText = "M-Team";
     javl_title.append(mteam);
-    
+
     // btn: autofill
     var autofill = document.createElement("a");
     autofill.setAttribute("class", "smallbutton");
