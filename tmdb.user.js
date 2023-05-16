@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
-// @version   	1.3.3
+// @version   	1.3.4
 // ==/UserScript==
 
 (function() {
@@ -21,7 +21,7 @@ img.width = 30;
 let m = location.pathname.match(/\/(\w+)\/(\d+)/);
 let cat = m[1];
 let id = m[2];
-let url = 'https://oracle.tomyangsh.pw/ptinfo/api/detail?cat=' + cat + '&id=' + id;
+let url = 'https://oracle.tomyangsh.pw/api/tmdb?cat=' + cat + '&id=' + id;
 let zh_names = new Set();
 let xhttp  = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
