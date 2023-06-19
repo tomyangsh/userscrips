@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
-// @version   	1.3.4
+// @version   	1.3.5
 // ==/UserScript==
 
 (function() {
@@ -15,7 +15,7 @@ var trakt_link = social_links.appendChild(document.createElement("a"));
 trakt_link.href = trakt_url;
 trakt_link.target = "_blank";
 var img = trakt_link.appendChild(document.createElement("img"));
-img.src = "https://www.tomyangsh.pw/dav/trakt-icon-red-white.svg";
+img.src = "https://oracle.tomyangsh.pw/trakt-icon.svg";
 img.width = 30;
 
 let m = location.pathname.match(/\/(\w+)\/(\d+)/);
