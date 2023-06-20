@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.1.4
+// @version     1.1.5
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -35,7 +35,7 @@
       }
     }
   }
-  let url = `https://oracle.tomyangsh.pw/api/dmm?keyword=${javl_bango}`;
+  let url = `https://tomyangsh.pw/api/dmm?keyword=${javl_bango}`;
   xhttp.open("GET", url, true);
   xhttp.send();
 

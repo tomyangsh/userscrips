@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
-// @version   	1.3.5
+// @version   	1.3.6
 // ==/UserScript==
 
 (function() {
@@ -15,13 +15,13 @@ var trakt_link = social_links.appendChild(document.createElement("a"));
 trakt_link.href = trakt_url;
 trakt_link.target = "_blank";
 var img = trakt_link.appendChild(document.createElement("img"));
-img.src = "https://oracle.tomyangsh.pw/trakt-icon.svg";
+img.src = "https://tomyangsh.pw/trakt-icon.svg";
 img.width = 30;
 
 let m = location.pathname.match(/\/(\w+)\/(\d+)/);
 let cat = m[1];
 let id = m[2];
-let url = 'https://oracle.tomyangsh.pw/api/tmdb?cat=' + cat + '&id=' + id;
+let url = 'https://tomyangsh.pw/api/tmdb?cat=' + cat + '&id=' + id;
 let zh_names = new Set();
 let xhttp  = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
@@ -42,7 +42,7 @@ xhttp.onreadystatechange = function() {
       imdb_link.href = `https://www.imdb.com/title/${imdb}/`;
       imdb_link.target = "_blank";
       var icon = imdb_link.appendChild(document.createElement("img"));
-      icon.src = "https://oracle.tomyangsh.pw/imdb.svg";
+      icon.src = "https://tomyangsh.pw/imdb.svg";
       icon.width = 30;
     }
 
