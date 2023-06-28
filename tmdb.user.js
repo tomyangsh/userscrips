@@ -4,16 +4,11 @@
 // @include   	https://www.themoviedb.org/movie/*
 // @include   	https://www.themoviedb.org/tv/*
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.4.0
+// @version   	1.4.1
 // ==/UserScript==
 
 (function() {
   'use strict'
-
-  var scriptElement = document.createElement( "script" );
-  scriptElement.type = "text/javascript";
-  scriptElement.src = "https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js";
-  document.body.appendChild( scriptElement );
 
   var trakt_url = 'https://trakt.tv/search/tmdb?query='+/\d+/.exec(document.baseURI)[0];
   var social_links = document.getElementsByClassName("social_links")[0];
