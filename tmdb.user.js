@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name    	TMDB
 // @namespace   https://github.com/tomyangsh/userscrips
-// @include   	https://www.themoviedb.org/movie/*
-// @include   	https://www.themoviedb.org/tv/*
+// @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
+// @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.4.1
+// @version   	1.4.2
 // ==/UserScript==
 
 (function() {
