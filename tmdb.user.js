@@ -5,7 +5,7 @@
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.5.2
+// @version   	1.5.3
 // ==/UserScript==
 
 (function() {
@@ -52,6 +52,13 @@
   if (web_date) {
     let web_date_span = document.querySelector('div.facts').appendChild(document.createElement("span"));
     web_date_span.innerText = 'WEB: ' + web_date;
+  }
+
+  let next_episode = result.next_episode
+
+  if (next_episode) {
+    let next_episode_span = document.querySelector('div.facts').appendChild(document.createElement("span"));
+    next_episode_span.innerText = '下一集：' + next_episode;
   }
 
   var castinfo = [];
