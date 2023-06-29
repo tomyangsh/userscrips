@@ -5,7 +5,7 @@
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.5.3
+// @version   	1.5.4
 // ==/UserScript==
 
 (function() {
@@ -59,6 +59,23 @@
   if (next_episode) {
     let next_episode_span = document.querySelector('div.facts').appendChild(document.createElement("span"));
     next_episode_span.innerText = '下一集：' + next_episode;
+  }
+
+  let trailer = result.trailer
+
+  if (!document.getElementsByClassName('video').length && trailer) {
+    let youtube_id = /v=(.+)/.exec(trailer)[1]
+    let trailer_li = document.querySelector('ul.actions').appendChild(document.createElement("li"));
+    trailer_li.setAttribute("class", "video none");
+    let trailer_a = trailer_li.appendChild(document.createElement("a"));
+    trailer_a.setAttribute("class", "no_click play_trailer");
+    trailer_a.setAttribute("data-site", "YouTube");
+    trailer_a.setAttribute("data-id", youtube_id);
+    trailer_a.setAttribute("data-title", "预告片");
+    trailer_a.href = '#';
+    trailer_a.innerText = '播放预告片';
+    trailer_a.prepend(document.createElement("span"));
+    trailer_a.childNodes[0].setAttribute("class", "glyphicons_v2 play");
   }
 
   var castinfo = [];
