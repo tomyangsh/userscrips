@@ -4,7 +4,7 @@
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.5.0
+// @version   	1.5.1
 // ==/UserScript==
 
 (function() {
@@ -98,10 +98,10 @@ ${result.des}
 [/size]`
   }
 
-  var ptinfo_link = document.querySelector('h2').appendChild(document.createElement("span")).appendChild(document.createElement("a"))
-  ptinfo_link.innerText = '复制ptinfo'
-  ptinfo_link.setAttribute("class", "copy");
-  ptinfo_link.style = "font-size: 20px; cursor: pointer;"
+  var ptinfo_button = document.querySelector('h2').appendChild(document.createElement("button"))
+  ptinfo_button.innerText = '复制ptinfo'
+  ptinfo_button.setAttribute("class", "copy");
+  ptinfo_button.style = "font-size: 15px; cursor: pointer; color: black; font-weight: normal;"
 
   unsafeWindow.ptinfo = ptinfo;
   var clipboard = new ClipboardJS('.copy', {
@@ -111,7 +111,7 @@ ${result.des}
   });
 
   clipboard.on('success', function () {
-    document.querySelector('h2 span a').innerText = '已复制';
+    document.querySelector('button.copy').innerText = '已复制';
   });
 
 })()
