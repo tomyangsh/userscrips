@@ -4,7 +4,7 @@
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.4.2
+// @version   	1.5.0
 // ==/UserScript==
 
 (function() {
@@ -30,17 +30,11 @@
 
   let zh_names = result.zh_names;
 
-  var ptinfo_link = document.querySelector('h2').appendChild(document.createElement("span")).appendChild(document.createElement("a"))
-  ptinfo_link.innerText = '复制ptinfo'
-  ptinfo_link.setAttribute("class", "copy");
-  ptinfo_link.style = "font-size: 20px; cursor: pointer;"
-
   if (zh_names) {
-  document.querySelector('h2 a').innerText = zh_names;
-  document.querySelector('h2 a').style = "font-size: 30px;";
+    document.querySelector('h2 a').innerText = zh_names;
+    document.querySelector('h2 a').style = "font-size: 30px;";
   }
 
-  let teamdrive_id = result.teamdrive_id;
   let imdb = result.imdb;
 
   if (imdb) {
@@ -50,6 +44,13 @@
     var icon = imdb_link.appendChild(document.createElement("img"));
     icon.src = "https://tomyangsh.pw/imdb.svg";
     icon.width = 30;
+  }
+
+  let web_date = result.web_date
+
+  if (web_date) {
+    let web_date_span = document.querySelector('div.facts').appendChild(document.createElement("span"));
+    web_date_span.innerText = 'WEB: ' + web_date;
   }
 
   var castinfo = [];
@@ -96,6 +97,11 @@ IMDb  https://www.imdb.com/title/${result.imdb}/
 ${result.des}
 [/size]`
   }
+
+  var ptinfo_link = document.querySelector('h2').appendChild(document.createElement("span")).appendChild(document.createElement("a"))
+  ptinfo_link.innerText = '复制ptinfo'
+  ptinfo_link.setAttribute("class", "copy");
+  ptinfo_link.style = "font-size: 20px; cursor: pointer;"
 
   unsafeWindow.ptinfo = ptinfo;
   var clipboard = new ClipboardJS('.copy', {
