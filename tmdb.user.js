@@ -5,7 +5,7 @@
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.5.4
+// @version   	1.5.5
 // ==/UserScript==
 
 (function() {
@@ -32,8 +32,10 @@
   let zh_names = result.zh_names;
 
   if (zh_names) {
-    document.querySelector('h2 a').innerText = zh_names;
-    document.querySelector('h2 a').style = "font-size: 30px;";
+    var zh_names_span = document.createElement('span');
+    zh_names_span.innerText = zh_names;
+    zh_names_span.style = "font-size: 30px;";
+    document.querySelector('h2 a').replaceWith(zh_names_span);
   }
 
   let imdb = result.imdb;
