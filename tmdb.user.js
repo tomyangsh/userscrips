@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name    	TMDB
+// @name    	  TMDB
+// @author      大統領
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.5.1
+// @version   	1.5.2
 // ==/UserScript==
 
 (function() {
