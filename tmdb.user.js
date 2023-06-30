@@ -5,7 +5,7 @@
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.5.5
+// @version   	1.5.6
 // ==/UserScript==
 
 (function() {
@@ -108,7 +108,7 @@ IMDb  https://www.imdb.com/title/${result.imdb}/
 ${result.des}
 [/size]`
   } else {
-    ptinfo = `[img]${result.poster[0].path}[/img]
+    ptinfo = `[img]${result.poster_main}[/img]
 [size=3]
 [b]${result.name} ${result.ori_name} (${result.year})[/b]
 
