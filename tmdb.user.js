@@ -5,7 +5,7 @@
 // @include   	/^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include   	/^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version   	1.5.6
+// @version   	1.5.7
 // ==/UserScript==
 
 (function() {
@@ -26,6 +26,7 @@
   let url = 'https://tomyangsh.pw/api/tmdb?cat=' + cat + '&id=' + id;
   let xhttp  = new XMLHttpRequest();
   xhttp.open("GET", url, false);
+  xhttp.setRequestHeader("User-Agent", document.baseURI);
   xhttp.send();
   let result = JSON.parse(xhttp.responseText);
 
