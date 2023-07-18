@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.1.5
+// @version     1.1.6
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant       none
@@ -12,7 +12,7 @@
 
   var javl_bango = document.querySelector("#video_id table tbody tr td.text").innerText;
 
-  var parent = document.getElementsByClassName("previewthumbs")[0];
+  var parent = document.getElementsByClassName("socialmedia")[0];
   let xhttp  = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
