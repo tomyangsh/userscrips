@@ -2,8 +2,8 @@
 // @name        Orpheus upload
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     https://orpheus.network/upload.php#info=*
-// @version     1.0.0
-// @grant          none
+// @version     1.0.1
+// @author      大統領
 // ==/UserScript==
 
 let url = location.hash.match(/(^|#)info=([^#]*)(#|$)/)[2]
