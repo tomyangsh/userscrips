@@ -2,7 +2,7 @@
 // @name        Orpheus upload
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     https://orpheus.network/upload.php#info=*
-// @version     1.0.1
+// @version     1.0.2
 // @author      大統領
 // ==/UserScript==
 
@@ -17,7 +17,7 @@ xhttp.onreadystatechange = function() {
     document.querySelector('#year').value = dic.year;
     document.querySelector('#record_label').value = dic.label;
     if (dic.catno) {
-      document.querySelector('#catalogue_number').value = dic.catno;
+      document.querySelector('#catalogue_number').value = dic.catalogue_number;
     }
     document.querySelector('#media').value = dic.media;
     document.querySelector('#format').value = 'FLAC';
