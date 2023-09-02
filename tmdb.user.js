@@ -5,7 +5,7 @@
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version     1.6.0
+// @version     1.6.1
 // ==/UserScript==
 
 (function() {
@@ -111,20 +111,20 @@ ${result.des}
 [/size]`
       } else {
         ptinfo = `[img]${result.poster_main}[/img]
-    [size=3]
-    [b]${result.name} ${result.ori_name} (${result.year})[/b]
+[size=3]
+[b]${result.name} ${result.ori_name} (${result.year})[/b]
 
-    主创   ${result.creator}
-    类型   ${result.genres}
-    国家   ${result.country}
-    语言   ${result.lang}
-    网络   ${result.network}
-    首播   ${result.date}
-    IMDb  https://www.imdb.com/title/${result.imdb}/
-    演员   ${castinfo.join('\n          ')}
+主创   ${result.creator}
+类型   ${result.genres}
+国家   ${result.country}
+语言   ${result.lang}
+网络   ${result.network}
+首播   ${result.date}
+IMDb  https://www.imdb.com/title/${result.imdb}/
+演员   ${castinfo.join('\n          ')}
 
-    ${result.des}
-    [/size]`
+${result.des}
+[/size]`
       }
 
       var ptinfo_button = document.querySelector('h2').appendChild(document.createElement("button"))
