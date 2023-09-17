@@ -5,20 +5,13 @@
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version     1.6.1
+// @version     1.6.2
 // ==/UserScript==
 
 (function() {
   'use strict'
 
-  var trakt_url = 'https://trakt.tv/search/tmdb?query='+/\d+/.exec(document.baseURI)[0];
   var social_links = document.getElementsByClassName("social_links")[0];
-  var trakt_link = social_links.appendChild(document.createElement("a"));
-  trakt_link.href = trakt_url;
-  trakt_link.target = "_blank";
-  var img = trakt_link.appendChild(document.createElement("img"));
-  img.src = "https://tomyangsh.pw/trakt-icon.svg";
-  img.width = 30;
 
   const m = location.pathname.match(/\/(\w+)\/(\d+)/);
   const cat = m[1];
@@ -49,6 +42,12 @@
         var icon = imdb_link.appendChild(document.createElement("img"));
         icon.src = "https://tomyangsh.pw/imdb.svg";
         icon.width = 30;
+        var trakt_link = social_links.appendChild(document.createElement("a"));
+        trakt_link.href = `https://trakt.tv/search/imdb?query=${imdb}`;
+        trakt_link.target = "_blank";
+        var img = trakt_link.appendChild(document.createElement("img"));
+        img.src = "https://tomyangsh.pw/trakt-icon.svg";
+        img.width = 30;
       }
 
       let web_date = result.web_date
