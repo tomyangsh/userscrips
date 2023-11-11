@@ -2,7 +2,7 @@
 // @name        milkie - search
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/browse/*
-// @version     1.1.1
+// @version     1.1.2
 // @author      大統領
 // ==/UserScript==
 
@@ -15,6 +15,7 @@ setTimeout(function() {
   ops_search_link.href = ops_search_url;
   ops_search_link.target = "_blank";
   var red_search_url = `https://redacted.ch/torrents.php?searchstr=${music_query}`;
+  var red_search_link = document.querySelectorAll('div.inner')[1].appendChild(document.createElement("a"));
   red_search_link.innerText = 'search red';
   red_search_link.href = red_search_url;
   red_search_link.target = "_blank";
