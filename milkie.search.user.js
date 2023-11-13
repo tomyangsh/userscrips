@@ -2,13 +2,13 @@
 // @name        milkie - search
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/browse/*
-// @version     1.1.3
+// @version     1.1.4
 // @author      大統領
 // ==/UserScript==
 
 setTimeout(function() {
   var link_box = document.querySelectorAll('div.inner')[1]
-  var music_title_parse = document.querySelector('title').innerText.match(/([^-]+)-([^-]+?)(_EP)?/);
+  var music_title_parse = document.querySelector('title').innerText.match(/([^-]+)-([^-]+?)(-|_EP)/);
   var music_query = `${music_title_parse[2].replaceAll('_', ' ')}`
   var ops_search_url = `https://orpheus.network/torrents.php?searchstr=${music_query}`;
   var ops_search_link = link_box.appendChild(document.createElement("a"));
