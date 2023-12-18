@@ -2,7 +2,7 @@
 // @name        milkie - search
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/*
-// @version     1.2.1
+// @version     1.3
 // @author      大統領
 // ==/UserScript==
 
@@ -12,7 +12,10 @@ function add_search(mutations) {
   if (title.match(/^(Browse|Details)/)) { return; };
   var music_title_parse = title.match(/([^-]+)-([^-]+?)(-|_EP).+WEB-FLAC/);
   if (music_title_parse) {
-    var music_query = `${music_title_parse[1].replaceAll('_', ' ')} ${music_title_parse[2].replaceAll('_', ' ')}`
+    var nfo = document.querySelector('span.toggle').__ngContext__[8].ngIf;
+    var artist = nfo.match(/artist[^\w]+(.+\w)/i)[1];
+    var album = nfo.match(/(album|title)[^\w]+(.+\w)/i)[2].replace(' EP', '');
+    var music_query = `${artist} ${album}`;
     var search_url = `https://redacted.ch/torrents.php?searchstr=${music_query}`;
   } else { return; }
   var search_link = document.createElement("a");
