@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.2
+// @version     1.2.1
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant    GM_addStyle
@@ -17,12 +17,11 @@ GM_addStyle ( `
   height: 100%;
   background-color: black;
   z-index: 1001;
-  -moz-opacity: 0.8;
   opacity: .80;
   filter: alpha(opacity=80);
 }
 
-#light {
+div.video {
   display: none;
   position: fixed;
   top: 50%;
@@ -34,24 +33,23 @@ GM_addStyle ( `
 
 const pid = document.querySelector("#video_id table tbody tr td.text").innerText;
 
-function lightbox_open() {
-  var lightBoxVideo = document.getElementById("VisaChipCardVideo");
-  window.scrollTo(0, 0);
-  document.getElementById('light').style.display = 'block';
+function video_player_open() {
+  var video_player = document.querySelector("video");
+  document.querySelector("div.video").style.display = 'block';
   document.getElementById('fade').style.display = 'block';
-  lightBoxVideo.play();
+  video_player.play();
 }
 
-unsafeWindow.lightbox_open = lightbox_open;
+unsafeWindow.video_player_open = video_player_open;
 
-function lightbox_close() {
-  var lightBoxVideo = document.getElementById("VisaChipCardVideo");
-  document.getElementById('light').style.display = 'none';
+function video_player_close() {
+  var video_player = document.querySelector("video");
+  document.querySelector("div.video").style.display = 'none';
   document.getElementById('fade').style.display = 'none';
-  lightBoxVideo.pause();
+  video_player.pause();
 }
 
-unsafeWindow.lightbox_close = lightbox_close;
+unsafeWindow.video_player_close = video_player_close;
 
 let xhttp  = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
@@ -62,25 +60,24 @@ xhttp.onreadystatechange = function() {
       if (result[0].preview) {
         document.querySelectorAll('a.btn_videoplayer').forEach(i => i.remove());
         let src = result[0].preview;
-        var div_light = document.createElement("div");
-        div_light.id = 'light';
-        document.querySelector("body").append(div_light);
+        var div_video = document.createElement("div");
+        div_video.setAttribute('class', 'video')
+        document.querySelector("body").append(div_video);
         var preview_video = document.createElement("video");
-        preview_video.id = "VisaChipCardVideo";
         preview_video.setAttribute("controls", true);
-        div_light.append(preview_video);
+        div_video.append(preview_video);
         var preview_source = document.createElement("source");
         preview_source.type = "video/mp4";
         preview_source.src = src;
         preview_video.append(preview_source);
         div_fade = document.createElement("div");
-        div_fade.setAttribute("onClick", "lightbox_close();");
+        div_fade.setAttribute("onClick", "video_player_close();");
         div_fade.id = 'fade';
         document.querySelector("body").append(div_fade);
         button_preview = document.createElement("a");
         button_preview.setAttribute("class", "smallbutton");
         button_preview.innerText = "Preview";
-        button_preview.setAttribute("onClick", "lightbox_open();");
+        button_preview.setAttribute("onClick", "video_player_open();");
         h3.append(button_preview);
       }
     }
@@ -92,7 +89,7 @@ xhttp.send();
 
 // title
 const h3 = document.querySelector("h3");
-title = h3.childNodes[0];
+var title = h3.childNodes[0];
 title.removeAttribute("href");
 
 // btn: javbus
