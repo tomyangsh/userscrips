@@ -1,112 +1,128 @@
 // ==UserScript==
 // @name        JAV Library Assistant
-// @namespace	https://github.com/tomyangsh/userscrips
-// @version     1.1.6
+// @namespace	  https://github.com/tomyangsh/userscrips
+// @version     1.2
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
-// @grant       none
+// @grant    GM_addStyle
 // ==/UserScript==
 
-(function () {
-  "use strict";
+GM_addStyle ( `
+#fade {
+  display: none;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1001;
+  -moz-opacity: 0.8;
+  opacity: .80;
+  filter: alpha(opacity=80);
+}
 
-  var javl_bango = document.querySelector("#video_id table tbody tr td.text").innerText;
+#light {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1002;
+  transform: translate(-50%, -50%);
+}
+` );
 
-  var parent = document.getElementsByClassName("socialmedia")[0];
-  let xhttp  = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      let result = JSON.parse(this.responseText);
-      if (result.length && result[0].pid == javl_bango) {
-        document.querySelector("#video_date table tr td.text").innerText = result[0].date;
-        if (result[0].preview) {
-          let src = result[0].preview;
-          var preview = document.createElement("video");
-          preview.width = 640;
-          preview.height = 360;
-          preview.setAttribute("controls", true);
-          var source = document.createElement("source");
-          source.type = "video/mp4";
-          source.src = src;
-          preview.appendChild(source);
-          parent.style = "height: 360px; text-align: left;";
-          parent.replaceChildren(preview);
-        }
+const pid = document.querySelector("#video_id table tbody tr td.text").innerText;
+
+function lightbox_open() {
+  var lightBoxVideo = document.getElementById("VisaChipCardVideo");
+  window.scrollTo(0, 0);
+  document.getElementById('light').style.display = 'block';
+  document.getElementById('fade').style.display = 'block';
+  lightBoxVideo.play();
+}
+
+unsafeWindow.lightbox_open = lightbox_open;
+
+function lightbox_close() {
+  var lightBoxVideo = document.getElementById("VisaChipCardVideo");
+  document.getElementById('light').style.display = 'none';
+  document.getElementById('fade').style.display = 'none';
+  lightBoxVideo.pause();
+}
+
+unsafeWindow.lightbox_close = lightbox_close;
+
+let xhttp  = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    let result = JSON.parse(this.responseText);
+    if (result.length && result[0].pid == pid) {
+      document.querySelector("#video_date table tr td.text").innerText = result[0].date;
+      if (result[0].preview) {
+        document.querySelectorAll('a.btn_videoplayer').forEach(i => i.remove());
+        let src = result[0].preview;
+        var div_light = document.createElement("div");
+        div_light.id = 'light';
+        document.querySelector("body").append(div_light);
+        var preview_video = document.createElement("video");
+        preview_video.id = "VisaChipCardVideo";
+        preview_video.setAttribute("controls", true);
+        div_light.append(preview_video);
+        var preview_source = document.createElement("source");
+        preview_source.type = "video/mp4";
+        preview_source.src = src;
+        preview_video.append(preview_source);
+        div_fade = document.createElement("div");
+        div_fade.setAttribute("onClick", "lightbox_close();");
+        div_fade.id = 'fade';
+        document.querySelector("body").append(div_fade);
+        button_preview = document.createElement("a");
+        button_preview.setAttribute("class", "smallbutton");
+        button_preview.innerText = "Preview";
+        button_preview.setAttribute("onClick", "lightbox_open();");
+        h3.append(button_preview);
       }
     }
   }
-  let url = `https://tomyangsh.pw/api/dmm?keyword=${javl_bango}`;
-  xhttp.open("GET", url, true);
-  xhttp.send();
+}
+let url = `https://tomyangsh.pw/api/dmm?keyword=${pid}`;
+xhttp.open("GET", url, true);
+xhttp.send();
 
-  try {
+// title
+const h3 = document.querySelector("h3");
+title = h3.childNodes[0];
+title.removeAttribute("href");
 
-    // remove title link
-    document
-      .querySelector("#video_title h3.post-title.text a")
-      .removeAttribute("href");
+// btn: javbus
+var javbus = document.createElement("a");
+javbus.setAttribute("class", "smallbutton");
+javbus.setAttribute("target", "_blank");
+javbus.setAttribute("href", `https://www.javbus.com/${pid}`);
+javbus.innerText = "JavBus";
+h3.append(javbus);
 
-    // title
-    var javl_title = document.querySelector("#video_title h3.post-title.text");
-    var ori_title = javl_title.innerText;
-    var img = document.querySelector("#video_jacket_img").src;
+// btn: sukebei
+var sukebei = document.createElement("a");
+sukebei.setAttribute("class", "smallbutton");
+sukebei.setAttribute("target", "_blank");
+sukebei.setAttribute("href", `https://sukebei.nyaa.si/?q=${pid}`);
+sukebei.innerText = "Sukebei";
+h3.append(sukebei);
 
-    // btn: javbus
-    var javbus = document.createElement("a");
-    javbus.setAttribute("class", "smallbutton");
-    javbus.setAttribute("target", "_blank");
-    javbus.setAttribute("href", "https://www.javbus.com/" + javl_bango);
-    javbus.innerText = "JavBus";
-    javl_title.append(javbus);
+// btn: M-Team
+var mteam = document.createElement("a");
+mteam.setAttribute("class", "smallbutton");
+mteam.setAttribute("target", "_blank");
+mteam.setAttribute("href", `https://kp.m-team.cc/adult.php?search=${pid}`);
+mteam.innerText = "M-Team";
+h3.append(mteam);
 
-    // btn: sukebei
-    var sukebei = document.createElement("a");
-    sukebei.setAttribute("class", "smallbutton");
-    sukebei.setAttribute("target", "_blank");
-    sukebei.setAttribute("href", "https://sukebei.nyaa.si/?q=" + javl_bango);
-    sukebei.innerText = "Sukebei";
-    javl_title.append(sukebei);
-
-    // btn: m-team
-    var mteam = document.createElement("a");
-    mteam.setAttribute("class", "smallbutton");
-    mteam.setAttribute("target", "_blank");
-    mteam.setAttribute("href", "https://kp.m-team.cc/adult.php?search=" + javl_bango);
-    mteam.innerText = "M-Team";
-    javl_title.append(mteam);
-
-    // btn: autofill
-    var autofill = document.createElement("a");
-    autofill.setAttribute("class", "smallbutton");
-    autofill.setAttribute("target", "_blank");
-    autofill.setAttribute("href", 'https://kp.m-team.cc/upload.php#fillinfo={"javl_bango":"' + javl_bango + '","title":"' + ori_title + '","description":"\n[img]'+ img +'[/img]\n"}');
-    autofill.innerText = "upload";
-    javl_title.append(autofill);
-
-    // btn: dmm
-    var title = document.querySelector("#video_title h3 a").innerText.replace(/\w+-\d+\s/, "");
-    var dmm = document.createElement("a");
-    dmm.setAttribute("class", "smallbutton");
-    dmm.setAttribute("target", "_blank");
-    dmm.setAttribute("href", "https://www.dmm.co.jp/digital/videoa/-/list/search/=/?searchstr=" + title);
-    dmm.innerText = "dmm";
-    javl_title.append(dmm);
-  } catch {}
-
-  try {
-    var infojson = JSON.parse(decodeURIComponent(location.hash.match(/(^|#)fillinfo=([^#]*)(#|$)/)[2]))
-    var input=document.querySelector('#name');
-    input.value=infojson.title;
-    var input=document.querySelector('#dmmtxt');
-    input.value=infojson.javl_bango;
-    var input=document.querySelector('#descr');
-    input.value=infojson.description;
-    document.getElementById("browsecat").value=410;
-    document.getElementsByName("codec_sel")[0].value=1;
-    document.getElementsByName("standard_sel")[0].value=1;
-    document.getElementsByName("processing_sel")[0].value=4;
-    document.getElementsByName("uplver")[0].checked=true;
-    document.getElementsByClassName("codebuttons")[0].click();
-  } catch {}
-
-})();
+// btn: FSM
+var button_fsm = document.createElement("a");
+button_fsm.setAttribute("class", "smallbutton");
+button_fsm.setAttribute("target", "_blank");
+button_fsm.setAttribute("href", `https://fsm.name/Torrents?keyword=${pid}`);
+button_fsm.innerText = "FSM";
+h3.append(button_fsm);
