@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.2.1
+// @version     1.2.2
 // @include     *://www.javlibrary.com/*/?v=*
 // @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant    GM_addStyle
@@ -78,6 +78,7 @@ xhttp.onreadystatechange = function() {
         button_preview.setAttribute("class", "smallbutton");
         button_preview.innerText = "Preview";
         button_preview.setAttribute("onClick", "video_player_open();");
+        button_preview.style.cursor = "pointer";
         h3.append(button_preview);
       }
     }
