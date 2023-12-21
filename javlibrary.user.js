@@ -1,14 +1,13 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.2.2
+// @version     1.3.0
 // @include     *://www.javlibrary.com/*/?v=*
-// @include     https://kp.m-team.cc/upload.php#fillinfo=*
 // @grant    GM_addStyle
 // ==/UserScript==
 
 GM_addStyle ( `
-#fade {
+.fade {
   display: none;
   position: fixed;
   top: 0%;
@@ -21,8 +20,7 @@ GM_addStyle ( `
   filter: alpha(opacity=80);
 }
 
-div.video {
-  display: none;
+.float {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -33,23 +31,55 @@ div.video {
 
 const pid = document.querySelector("#video_id table tbody tr td.text").innerText;
 
-function video_player_open() {
-  var video_player = document.querySelector("video");
-  document.querySelector("div.video").style.display = 'block';
-  document.getElementById('fade').style.display = 'block';
-  video_player.play();
+function float_video(src) {
+  var div_float = document.createElement("div");
+  div_float.setAttribute("class", "float");
+  document.querySelector("body").append(div_float);
+  var preview_video = document.createElement("video");
+  preview_video.setAttribute("controls", true);
+  div_float.append(preview_video);
+  var preview_source = document.createElement("source");
+  preview_source.type = "video/mp4";
+  preview_source.src = src;
+  preview_video.append(preview_source);
+  document.querySelector("div.fade").style.display = "block";
+  preview_video.play();
 }
 
-unsafeWindow.video_player_open = video_player_open;
+unsafeWindow.float_video = float_video;
 
-function video_player_close() {
-  var video_player = document.querySelector("video");
-  document.querySelector("div.video").style.display = 'none';
-  document.getElementById('fade').style.display = 'none';
-  video_player.pause();
+function float_img(src) {
+  var div_float = document.createElement("div");
+  div_float.setAttribute("class", "float");
+  document.querySelector("body").append(div_float);
+  var img_float = document.createElement("img");
+  img_float.src = src;
+  div_float.append(img_float);
+  document.querySelector("div.fade").style.display = "block";
 }
 
-unsafeWindow.video_player_close = video_player_close;
+unsafeWindow.float_img = float_img;
+
+function float_remove() {
+  document.querySelector("div.float").remove();
+  document.querySelector("div.fade").style.display = "none";
+}
+
+unsafeWindow.float_remove = float_remove;
+
+div_fade = document.createElement("div");
+div_fade.setAttribute("onClick", "float_remove();");
+div_fade.setAttribute("class", "fade");
+document.querySelector("body").append(div_fade);
+
+document.querySelectorAll("div.previewthumbs a").forEach((i) => {
+  if (i.className != "btn_videoplayer") {
+    img_thumb = i.childNodes[0];
+    img_thumb.src = i.href
+    img_thumb.setAttribute("onClick", "float_img(this.src)");
+    i.removeAttribute("href");
+  }
+});
 
 let xhttp  = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
@@ -58,26 +88,13 @@ xhttp.onreadystatechange = function() {
     if (result.length && result[0].pid == pid) {
       document.querySelector("#video_date table tr td.text").innerText = result[0].date;
       if (result[0].preview) {
-        document.querySelectorAll('a.btn_videoplayer').forEach(i => i.remove());
+        document.querySelectorAll("a.btn_videoplayer").forEach(i => i.remove());
         let src = result[0].preview;
-        var div_video = document.createElement("div");
-        div_video.setAttribute('class', 'video')
-        document.querySelector("body").append(div_video);
-        var preview_video = document.createElement("video");
-        preview_video.setAttribute("controls", true);
-        div_video.append(preview_video);
-        var preview_source = document.createElement("source");
-        preview_source.type = "video/mp4";
-        preview_source.src = src;
-        preview_video.append(preview_source);
-        div_fade = document.createElement("div");
-        div_fade.setAttribute("onClick", "video_player_close();");
-        div_fade.id = 'fade';
-        document.querySelector("body").append(div_fade);
         button_preview = document.createElement("a");
         button_preview.setAttribute("class", "smallbutton");
+        button_preview.value = src;
         button_preview.innerText = "Preview";
-        button_preview.setAttribute("onClick", "video_player_open();");
+        button_preview.setAttribute("onClick", "float_video(this.value);");
         button_preview.style.cursor = "pointer";
         h3.append(button_preview);
       }
