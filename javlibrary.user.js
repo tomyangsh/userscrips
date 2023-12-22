@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.3.1
+// @version     1.3.2
 // @include     *://www.javlibrary.com/*/?v=*
 // @grant    GM_addStyle
 // ==/UserScript==
@@ -31,79 +31,71 @@ GM_addStyle ( `
 
 const pid = document.querySelector("#video_id table tbody tr td.text").innerText;
 
-function float_video(src) {
+function float_video() {
   var div_float = document.createElement("div");
-  div_float.setAttribute("class", "float");
+  div_float.className = "float";
   document.querySelector("body").append(div_float);
   var preview_video = document.createElement("video");
-  preview_video.setAttribute("controls", true);
+  preview_video.controls = true;
   div_float.append(preview_video);
   var preview_source = document.createElement("source");
   preview_source.type = "video/mp4";
-  preview_source.src = src;
+  preview_source.src = this.src;
   preview_video.append(preview_source);
   document.querySelector("div.fade").style.display = "block";
   preview_video.play();
 }
 
-unsafeWindow.float_video = float_video;
-
-function float_img(src) {
+function float_img() {
   var div_float = document.createElement("div");
-  div_float.setAttribute("class", "float");
+  div_float.className = "float";
   document.querySelector("body").append(div_float);
   var img_float = document.createElement("img");
-  img_float.src = src;
+  img_float.src = this.src;
   div_float.append(img_float);
   document.querySelector("div.fade").style.display = "block";
 }
 
-unsafeWindow.float_img = float_img;
-
 function float_remove() {
   document.querySelector("div.float").remove();
-  document.querySelector("div.fade").style.display = "none";
+  this.style.display = "none";
 }
 
-unsafeWindow.float_remove = float_remove;
-
 div_fade = document.createElement("div");
-div_fade.setAttribute("onClick", "float_remove();");
-div_fade.setAttribute("class", "fade");
+div_fade.onclick = float_remove;
+div_fade.className = "fade";
 document.querySelector("body").append(div_fade);
 
 document.querySelectorAll("div.previewthumbs a").forEach((i) => {
   if (i.className != "btn_videoplayer") {
     img_thumb = i.childNodes[0];
     img_thumb.src = i.href
-    img_thumb.setAttribute("onClick", "float_img(this.src)");
+    img_thumb.onclick = float_img;
     i.removeAttribute("href");
   }
 });
 
 let xhr  = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
+  if (this.readyState == 4 & this.status == 200) {
     let result = JSON.parse(this.responseText);
     if (result.length && result[0].pid == pid) {
       document.querySelector("#video_date table tr td.text").innerText = result[0].date;
       if (result[0].preview) {
         document.querySelectorAll("a.btn_videoplayer").forEach(i => i.remove());
-        let src = result[0].preview;
-        button_preview = document.createElement("a");
-        button_preview.setAttribute("class", "smallbutton");
-        button_preview.value = src;
+        button_preview = document.createElement("button");
+        button_preview.className = "smallbutton";
+        button_preview.src = result[0].preview;
         button_preview.innerText = "Preview";
-        button_preview.setAttribute("onClick", "float_video(this.value);");
-        button_preview.style.cursor = "pointer";
+        button_preview.onclick = float_video;
+        button_preview.style = "cursor: pointer; color: black;";
         h3.append(button_preview);
       }
     }
   }
 }
 let url = `https://tomyangsh.pw/api/dmm?keyword=${pid}`;
-xhr.open("GET", url, true);
-xhr.setRequestHeader("User-Agent", '');
+xhr.open("GET", url);
 xhr.send();
 
 // title
@@ -113,32 +105,32 @@ title.removeAttribute("href");
 
 // btn: javbus
 var javbus = document.createElement("a");
-javbus.setAttribute("class", "smallbutton");
-javbus.setAttribute("target", "_blank");
-javbus.setAttribute("href", `https://www.javbus.com/${pid}`);
+javbus.className = "smallbutton";
+javbus.target = "_blank";
+javbus.href = `https://www.javbus.com/${pid}`;
 javbus.innerText = "JavBus";
 h3.append(javbus);
 
 // btn: sukebei
 var sukebei = document.createElement("a");
-sukebei.setAttribute("class", "smallbutton");
-sukebei.setAttribute("target", "_blank");
-sukebei.setAttribute("href", `https://sukebei.nyaa.si/?q=${pid}`);
+sukebei.className = "smallbutton";
+sukebei.target = "_blank";
+sukebei.href = `https://sukebei.nyaa.si/?q=${pid}`;
 sukebei.innerText = "Sukebei";
 h3.append(sukebei);
 
 // btn: M-Team
 var mteam = document.createElement("a");
-mteam.setAttribute("class", "smallbutton");
-mteam.setAttribute("target", "_blank");
-mteam.setAttribute("href", `https://kp.m-team.cc/adult.php?search=${pid}`);
+mteam.className = "smallbutton";
+mteam.target = "_blank";
+mteam.href = `https://kp.m-team.cc/adult.php?search=${pid}`;
 mteam.innerText = "M-Team";
 h3.append(mteam);
 
 // btn: FSM
 var button_fsm = document.createElement("a");
-button_fsm.setAttribute("class", "smallbutton");
-button_fsm.setAttribute("target", "_blank");
-button_fsm.setAttribute("href", `https://fsm.name/Torrents?keyword=${pid}`);
+button_fsm.className = "smallbutton";
+button_fsm.target = "_blank";
+button_fsm.href = `https://fsm.name/Torrents?keyword=${pid}`;
 button_fsm.innerText = "FSM";
 h3.append(button_fsm);
