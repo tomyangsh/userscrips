@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.3.0
+// @version     1.3.1
 // @include     *://www.javlibrary.com/*/?v=*
 // @grant    GM_addStyle
 // ==/UserScript==
@@ -81,8 +81,8 @@ document.querySelectorAll("div.previewthumbs a").forEach((i) => {
   }
 });
 
-let xhttp  = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
+let xhr  = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
     let result = JSON.parse(this.responseText);
     if (result.length && result[0].pid == pid) {
@@ -102,8 +102,9 @@ xhttp.onreadystatechange = function() {
   }
 }
 let url = `https://tomyangsh.pw/api/dmm?keyword=${pid}`;
-xhttp.open("GET", url, true);
-xhttp.send();
+xhr.open("GET", url, true);
+xhr.setRequestHeader("User-Agent", '');
+xhr.send();
 
 // title
 const h3 = document.querySelector("h3");

@@ -5,7 +5,7 @@
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version     1.6.4
+// @version     1.6.5
 // ==/UserScript==
 
 var social_links = document.querySelector("div.social_links");
@@ -16,7 +16,7 @@ const id = m[2];
 const url = 'https://tomyangsh.pw/api/tmdb?cat=' + cat + '&id=' + id;
 const xhr  = new XMLHttpRequest();
 xhr.open("GET", url, true);
-xhr.setRequestHeader("User-Agent", document.baseURI);
+xhr.setRequestHeader("User-Agent", '');
 xhr.onload = () => {
   if (xhr.status === 200) {
     let result = JSON.parse(xhr.responseText);
