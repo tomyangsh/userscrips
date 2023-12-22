@@ -4,8 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @require     https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
-// @version     1.6.5
+// @version     1.6.6
 // ==/UserScript==
 
 var social_links = document.querySelector("div.social_links");
@@ -101,17 +100,14 @@ ${result.des}
 
     var ptinfo_button = document.querySelector('h2').appendChild(document.createElement("button"))
     ptinfo_button.innerText = '复制ptinfo'
-    ptinfo_button.setAttribute("class", "copy");
+    ptinfo_button.className = "copy";
     ptinfo_button.style = "font-size: 15px; cursor: pointer; color: black; font-weight: normal;"
-
-    unsafeWindow.ptinfo = ptinfo;
-    var clipboard = new ClipboardJS('.copy', {
-      text: () => ptinfo
-    });
-
-    clipboard.on('success', function () {
-      document.querySelector('button.copy').innerText = '已复制';
-    });
+    ptinfo_button.info = ptinfo;
+    ptinfo_button.onclick = function() {
+      navigator.clipboard.writeText(this.info).then(() => {
+        document.querySelector('button').innerText = '已复制';
+      });
+    };
   }
 }
 
