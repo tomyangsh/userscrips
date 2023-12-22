@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.6.6
+// @version     1.6.7
 // ==/UserScript==
 
 var social_links = document.querySelector("div.social_links");
@@ -14,11 +14,10 @@ const cat = m[1];
 const id = m[2];
 const url = 'https://tomyangsh.pw/api/tmdb?cat=' + cat + '&id=' + id;
 const xhr  = new XMLHttpRequest();
-xhr.open("GET", url, true);
-xhr.setRequestHeader("User-Agent", '');
-xhr.onload = () => {
-  if (xhr.status === 200) {
-    let result = JSON.parse(xhr.responseText);
+xhr.open("GET", url);
+xhr.onload = function() {
+  if (this.readyState == 4 & this.status === 200) {
+    let result = JSON.parse(this.responseText);
 
     let zh_names = result.zh_names;
 
