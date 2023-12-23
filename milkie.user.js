@@ -2,7 +2,7 @@
 // @name        milkie
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/*
-// @version     1.5
+// @version     1.5.1
 // @author      大統領
 // ==/UserScript==
 
@@ -15,8 +15,8 @@ function add_link(mutations) {
     return;
   } else if (mutation_result.match(/External information loaded/)) {
     var imdb_link = document.querySelector('div.rest div div a');
-    imdb_link.href = imdb_link.innerText;
     imdb_id = imdb_link.innerText.match(/tt\d+/)[0];
+    imdb_link.href = `https://www.imdb.com/title/${imdb_id}`;
     link_innerText = 'View on TMDB';
     link_href = `https://www.themoviedb.org/redirect?external_source=imdb_id&external_id=${imdb_id}`;
   } else if (mutations[0].target.localName == 'title') {
