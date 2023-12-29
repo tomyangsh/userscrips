@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.7.0
+// @version     1.7.1
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -65,46 +65,41 @@ xhr.onload = function() {
      }
     }
 
-    var ptinfo_title = '';
-    if (result.name && result.name != result.ori_name) {
-      ptinfo_title += `${result.name} `;
+    runtime = result.runtime ? `${result.runtime} 分钟` : null;
+
+    attributes = {
+      '导演': result.director,
+      '主创': result.creator,
+      '类型': result.genres,
+      '国家': result.country,
+      '语言': result.lang,
+      '网络': result.network,
+      '上映': result.date,
+      '片长': runtime,
+      'IMDb': `https://www.imdb.com/title/${result.imdb}/`,
+      '演员': castinfo.join('\n\t')
     }
-    ptinfo_title += `${result.ori_name} (${result.year})`;
 
-    var ptinfo;
-    if (result.cat == 'movie') {
-      ptinfo = `[img]${result.poster}[/img]
-[size=3]
-[b]${ptinfo_title}[/b]
+    poster = result.poster_main ? result.poster_main : result.poster;
 
-导演   ${result.director}
-类型   ${result.genres}
-国家   ${result.country}
-语言   ${result.lang}
-上映   ${result.date}
-片长   ${result.runtime} 分钟
-IMDb  https://www.imdb.com/title/${result.imdb}/
-演员   ${castinfo.join('\n          ')}
+    var ptinfo = `[img]${poster}[/img]\n[size=3]\n[b]${result.name}`;
 
-${result.des}
-[/size]`
-    } else {
-      ptinfo = `[img]${result.poster_main}[/img]
-[size=3]
-[b]${ptinfo_title}[/b]
-
-主创   ${result.creator}
-类型   ${result.genres}
-国家   ${result.country}
-语言   ${result.lang}
-网络   ${result.network}
-首播   ${result.date}
-IMDb  https://www.imdb.com/title/${result.imdb}/
-演员   ${castinfo.join('\n          ')}
-
-${result.des}
-[/size]`
+    if (result.name != result.ori_name) {
+      ptinfo += ` ${result.ori_name}`;
     }
+    ptinfo += ` (${result.year})[/b]\n\n`;
+
+    for (i of Object.keys(attributes)) {
+      if (attributes[i]) {
+        ptinfo += `${i}\t${attributes[i]}\n`
+      }
+    }
+
+    if (result.cat == 'tv') {
+      ptinfo = ptinfo.replace('上映', '首播');
+    }
+
+    ptinfo += `\n${result.des}\n[/size]`;
 
     const ptinfo_button = document.querySelector('h2').appendChild(document.createElement("button"))
     ptinfo_button.innerText = '复制ptinfo'
