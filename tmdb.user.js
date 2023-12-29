@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.6.8
+// @version     1.7.0
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -27,12 +27,16 @@ xhr.onload = function() {
       title.innerText = zh_names;
       title.style = "font-size: 30px;";
       if (!document.querySelector('p.wrap')) {
-        p_ori_name = document.createElement('p');
+        const p_ori_name = document.createElement('p');
         p_ori_name.appendChild(document.createElement('strong')).innerText = '原产地片名';
         p_ori_name.append(result.ori_name);
-        document.querySelector('section.facts').insertBefore(p_ori_name, document.querySelector('section.facts p'));
+        const section_facts = document.querySelector('section.facts');
+        section_facts.insertBefore(p_ori_name, section_facts.querySelector('p'));
       }
     }
+
+    const des = result.des;
+    document.querySelector('div.overview p').innerText = des;
 
     const imdb = result.imdb;
 
@@ -43,12 +47,6 @@ xhr.onload = function() {
       const imdb_icon = imdb_link.appendChild(document.createElement("img"));
       imdb_icon.src = "https://tomyangsh.pw/imdb.svg";
       imdb_icon.width = 30;
-      const trakt_link = social_links.appendChild(document.createElement("a"));
-      trakt_link.href = `https://trakt.tv/search/imdb?query=${imdb}`;
-      trakt_link.target = "_blank";
-      const track_icon = trakt_link.appendChild(document.createElement("img"));
-      track_icon.src = "https://tomyangsh.pw/trakt-icon.svg";
-      track_icon.width = 30;
     }
 
     const web_date = result.web_date
