@@ -2,7 +2,7 @@
 // @name        milkie
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/*
-// @version     1.5.1
+// @version     1.5.2
 // @author      大統領
 // ==/UserScript==
 
@@ -23,7 +23,7 @@ function add_link(mutations) {
     var category = document.querySelector('div.box div div').childNodes[1].innerText;
     if (category == 'Music') {
       var nfo = document.querySelector('span.toggle').__ngContext__[8].ngIf;
-      var artist = nfo.match(/artist[^\w]+(.+\w)/i)[1];
+      var artist = nfo.match(/artist(\(s\))?[^\w]+(.+\w)/i)[2];
       var album = nfo.match(/(album|title)[^\w]+(.+\w)/i)[2].replace(' EP', '');
       var music_query = `${artist} ${album}`;
       link_innerText = 'Search RED';
