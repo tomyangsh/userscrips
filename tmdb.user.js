@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.7.1
+// @version     1.7.2
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -36,7 +36,7 @@ xhr.onload = function() {
     }
 
     const des = result.des;
-    document.querySelector('div.overview p').innerText = des;
+    document.querySelector('div.overview').innerText = des.replace('\r', '\n\n');
 
     const imdb = result.imdb;
 
