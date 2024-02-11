@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.7.2
+// @version     1.7.3
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -58,26 +58,28 @@ xhr.onload = function() {
 
     const castinfo = [];
     for (i of result.cast) {
-     if (i.character) {
+      if (i.character) {
        castinfo.push(`${i.name} 饰 ${i.character}`);
-     } else {
+      } else {
        castinfo.push(i.name);
-     }
+      }
+      index = result.cast.indexOf(i);
+      document.querySelector('ol.people.scroller').children[index].querySelector('p a').innerText = i.name;
     }
 
     runtime = result.runtime ? `${result.runtime} 分钟` : null;
 
     attributes = {
-      '导演': result.director,
-      '主创': result.creator,
-      '类型': result.genres,
-      '国家': result.country,
-      '语言': result.lang,
-      '网络': result.network,
-      '上映': result.date,
-      '片长': runtime,
+      '导演 ': result.director,
+      '主创 ': result.creator,
+      '类型 ': result.genres,
+      '国家 ': result.country,
+      '语言 ': result.lang,
+      '网络 ': result.network,
+      '上映 ': result.date,
+      '片长 ': runtime,
       'IMDb': `https://www.imdb.com/title/${result.imdb}/`,
-      '演员': castinfo.join('\n\t')
+      '演员 ': castinfo.join('\n　　   ')
     }
 
     poster = result.poster_main ? result.poster_main : result.poster;
@@ -91,7 +93,7 @@ xhr.onload = function() {
 
     for (i of Object.keys(attributes)) {
       if (attributes[i]) {
-        ptinfo += `${i}\t${attributes[i]}\n`
+        ptinfo += `${i}  ${attributes[i]}\n`
       }
     }
 
