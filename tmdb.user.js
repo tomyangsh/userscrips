@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.7.3
+// @version     1.7.4
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -63,8 +63,6 @@ xhr.onload = function() {
       } else {
        castinfo.push(i.name);
       }
-      index = result.cast.indexOf(i);
-      document.querySelector('ol.people.scroller').children[index].querySelector('p a').innerText = i.name;
     }
 
     runtime = result.runtime ? `${result.runtime} 分钟` : null;
