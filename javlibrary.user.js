@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.3.2
+// @version     1.3.3
 // @include     *://www.javlibrary.com/*/?v=*
 // @grant    GM_addStyle
 // ==/UserScript==
@@ -27,6 +27,10 @@ GM_addStyle ( `
   z-index: 1002;
   transform: translate(-50%, -50%);
 }
+
+video {
+      width: 800px;
+    }
 ` );
 
 const pid = document.querySelector("#video_id table tbody tr td.text").innerText;
@@ -37,6 +41,7 @@ function float_video() {
   document.querySelector("body").append(div_float);
   var preview_video = document.createElement("video");
   preview_video.controls = true;
+
   div_float.append(preview_video);
   var preview_source = document.createElement("source");
   preview_source.type = "video/mp4";
