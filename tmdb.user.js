@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.7.4
+// @version     1.7.5
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -104,7 +104,7 @@ xhr.onload = function() {
     const ptinfo_button = document.querySelector('h2').appendChild(document.createElement("button"))
     ptinfo_button.innerText = '复制ptinfo'
     ptinfo_button.className = "copy";
-    ptinfo_button.style = "font-size: 15px; cursor: pointer; color: black; font-weight: normal;"
+    ptinfo_button.style = "font-size: 15px; cursor: pointer; color: black; font-weight: normal;border: 1px solid #dcdcdc;border-radius: 5px;background-color: #f9f9f9;padding: 2px 10px;"
     ptinfo_button.info = ptinfo;
     ptinfo_button.onclick = function() {
       navigator.clipboard.writeText(this.info).then(() => {
