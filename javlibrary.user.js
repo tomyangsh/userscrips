@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.3.3
+// @version     1.3.4
 // @include     *://www.javlibrary.com/*/?v=*
 // @grant    GM_addStyle
 // ==/UserScript==
@@ -128,7 +128,7 @@ h3.append(sukebei);
 var mteam = document.createElement("a");
 mteam.className = "smallbutton";
 mteam.target = "_blank";
-mteam.href = `https://kp.m-team.cc/adult.php?search=${pid}`;
+mteam.href = `https://kp.m-team.cc/browse/adult?keyword=${pid}`;
 mteam.innerText = "M-Team";
 h3.append(mteam);
 
