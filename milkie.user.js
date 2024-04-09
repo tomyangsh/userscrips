@@ -2,7 +2,7 @@
 // @name        milkie
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/*
-// @version     1.5.2
+// @version     1.6.0
 // @author      大統領
 // ==/UserScript==
 
@@ -15,10 +15,10 @@ function add_link(mutations) {
     return;
   } else if (mutation_result.match(/External information loaded/)) {
     var imdb_link = document.querySelector('div.rest div div a');
-    imdb_id = imdb_link.innerText.match(/tt\d+/)[0];
+    var imdb_id = imdb_link.innerText.match(/tt\d+/)[0];
     imdb_link.href = `https://www.imdb.com/title/${imdb_id}`;
-    link_innerText = 'View on TMDB';
-    link_href = `https://www.themoviedb.org/redirect?external_source=imdb_id&external_id=${imdb_id}`;
+    var link_innerText = 'View on TMDB';
+    var link_href = `https://www.themoviedb.org/redirect?external_source=imdb_id&external_id=${imdb_id}`;
   } else if (mutations[0].target.localName == 'title') {
     var category = document.querySelector('div.box div div').childNodes[1].innerText;
     if (category == 'Music') {
@@ -26,13 +26,18 @@ function add_link(mutations) {
       var artist = nfo.match(/artist(\(s\))?[^\w]+(.+\w)/i)[2];
       var album = nfo.match(/(album|title)[^\w]+(.+\w)/i)[2].replace(' EP', '');
       var music_query = `${artist} ${album}`;
-      link_innerText = 'Search RED';
-      link_href = `https://redacted.ch/torrents.php?searchstr=${music_query}`;
+      var link_innerText = 'Search RED';
+      var link_href = `https://redacted.ch/torrents.php?searchstr=${music_query}`;
       observer.observe(info_box.childNodes[7], config_childList)
-    } else if (category == 'TV' || 'Movie') {
+    } else if (['TV', 'Movie'].includes(category)) {
       var target_externals = document.querySelector('div.externals');
       observer.observe(target_externals, config_childList);
       return;
+    } else if (category == 'Adult') {
+      var title_parse = document.querySelector('h1').innerText.match(/([\w-]+)\.(\d\d\.\d\d\.\d\d|E\d+)\.(.+?)\.XXX/);
+      var fsm_query = title_parse[3].replaceAll('.', ' ');
+      var link_innerText = 'Search FSM';
+      var link_href = `https://fsm.name/Torrents?keyword=${fsm_query}`;
     }
   }
   var link = document.createElement("a");
