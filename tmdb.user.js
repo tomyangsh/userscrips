@@ -4,7 +4,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.7.5
+// @version     1.7.6
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -44,9 +44,9 @@ xhr.onload = function() {
       const imdb_link = social_links.appendChild(document.createElement("a"));
       imdb_link.href = `https://www.imdb.com/title/${imdb}/`;
       imdb_link.target = "_blank";
+      imdb_link.style = "width: 30px;";
       const imdb_icon = imdb_link.appendChild(document.createElement("img"));
       imdb_icon.src = "https://tomyangsh.pw/imdb.svg";
-      imdb_icon.width = 30;
     }
 
     const web_date = result.web_date
