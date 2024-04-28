@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name        TMDB
+// @name        TMDB 增强
 // @author      大統領
 // @namespace   https://github.com/tomyangsh/userscrips
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
-// @version     1.7.6
+// @grant       GM.xmlHttpRequest
+// @version     1.8
+// @description 补全中文标题，增加 IMDB 和豆瓣链接，一键复制 ptinfo
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");
@@ -12,12 +14,31 @@ const social_links = document.querySelector("div.social_links");
 const m = location.pathname.match(/\/(\w+)\/(\d+)/);
 const cat = m[1];
 const id = m[2];
-const url = 'https://tomyangsh.pw/api/tmdb?cat=' + cat + '&id=' + id;
-const xhr  = new XMLHttpRequest();
-xhr.open("GET", url);
-xhr.onload = function() {
-  if (this.readyState == 4 & this.status === 200) {
-    const result = JSON.parse(this.responseText);
+
+function appendDoubanLink(imdb_id) {
+  GM.xmlHttpRequest({
+    method: "GET",
+    url: `https://movie.douban.com/j/subject_suggest?q=${imdb_id}`,
+    onload: function(response) {
+      const result = JSON.parse(response.responseText);
+      if (result.length) {
+        const douban_id = result[0].id;
+        const douban_link = social_links.appendChild(document.createElement("a"));
+        douban_link.href = `https://movie.douban.com/subject/${douban_id}/`;
+        douban_link.target = "_blank";
+        douban_link.style = "width: 30px;";
+        const douban_icon = douban_link.appendChild(document.createElement("img"));
+        douban_icon.src = "https://www.douban.com/favicon.ico";
+      }
+    }
+  });
+}
+
+GM.xmlHttpRequest({
+  method: "GET",
+  url: `https://tomyangsh.pw/api/tmdb?cat=${cat}&id=${id}`,
+  onload: function(response) {
+    const result = JSON.parse(response.responseText);
 
     const title = document.querySelector('h2 a');
     title.removeAttribute('href');
@@ -38,15 +59,16 @@ xhr.onload = function() {
     const des = result.des;
     document.querySelector('div.overview').innerText = des.replace('\r', '\n\n');
 
-    const imdb = result.imdb;
+    const imdb_id = result.imdb;
 
-    if (imdb) {
+    if (imdb_id) {
       const imdb_link = social_links.appendChild(document.createElement("a"));
-      imdb_link.href = `https://www.imdb.com/title/${imdb}/`;
+      imdb_link.href = `https://www.imdb.com/title/${imdb_id}/`;
       imdb_link.target = "_blank";
       imdb_link.style = "width: 30px;";
       const imdb_icon = imdb_link.appendChild(document.createElement("img"));
-      imdb_icon.src = "https://tomyangsh.pw/imdb.svg";
+      imdb_icon.src = "https://imdb.com/favicon.ico";
+      appendDoubanLink(imdb_id);
     }
 
     const web_date = result.web_date
@@ -76,7 +98,7 @@ xhr.onload = function() {
       '网络 ': result.network,
       '上映 ': result.date,
       '片长 ': runtime,
-      'IMDb': `https://www.imdb.com/title/${result.imdb}/`,
+      'IMDb': `https://www.imdb.com/title/${imdb_id}/`,
       '演员 ': castinfo.join('\n　　   ')
     }
 
@@ -112,6 +134,4 @@ xhr.onload = function() {
       });
     };
   }
-}
-
-xhr.send();
+})
