@@ -7,7 +7,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.0
+// @version     2.0.1
 // @author      大統領
 // @description 馒头/emp 一键转种至 fsm
 // ==/UserScript==
@@ -91,8 +91,7 @@ switch (HOST) {
     break;
   case 'm-team':
     function collect_data_mt() {
-      const title_location = document.querySelector('h2');
-      const title = title_location.firstChild.innerText;
+      const title = document.querySelector('h2 span').innerText;
       let subtitle = '';
       let img_list = [];
       let tag = '';
