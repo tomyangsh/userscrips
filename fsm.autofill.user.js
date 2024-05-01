@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://www.pttime.org/details.php?id=*
 // @match       https://pornbay.org/torrents.php?id=*
 // @match       https://www.empornium.*/torrents.php?id=*
 // @match       https://*.m-team.*/detail/*
@@ -8,7 +9,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.1
+// @version     2.2
 // @author      大統領
 // @description 馒头/emp 一键转种至 fsm
 // ==/UserScript==
@@ -61,6 +62,74 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
+  case 'pttime': {
+    let subtitle;
+    let action_bar;
+    let tags = [];
+
+    document.querySelectorAll('td.rowhead').forEach(td => {
+      switch (td.innerText) {
+        case '资源标签': {
+          td.nextElementSibling.querySelectorAll('span').forEach(span => {
+            tags.push(span.innerText);
+          })
+
+          break;
+        }
+        case '副标题': {
+          subtitle = td.nextElementSibling.innerText;
+
+          break;
+        }
+        case '基本信息': {
+          const attribute = td.nextElementSibling.innerText;
+          if (attribute.match('无码')) {
+            tags.push('无码')
+          } else if (attribute.match('有码')) {
+            tags.push('有码')
+          } else if (attribute.match('写真')) {
+            tags.push('写真')
+          } else if (attribute.match('综艺')) {
+            tags.push('综艺')
+          }
+
+          break;
+        }
+        case '行为': {
+          action_bar = td.nextElementSibling;
+
+          break;
+        }
+      }
+    })
+
+    function collect_data () {
+      const title = document.querySelector('h1').firstChild.textContent;
+      const info_node = document.querySelector('#kdescr');
+      const img_list = [];
+
+      info_node.querySelectorAll('img').forEach(img => {
+        if (img.src.match('attachments')) {
+          img_list.push(img.src);
+        }
+      })
+
+      const tag = tags.join();
+      let upload_info = {
+        "title": title,
+        "subtitle": subtitle,
+        "img_list": img_list,
+        "tag": tag
+      }
+      GM_setValue("upload_info", upload_info);
+    }
+
+    const fsm_link = create_link(collect_data);
+    action_bar.append(' | ');
+    action_bar.append(fsm_link);
+
+    break;
+  }
   case 'pornbay': {
     const link_box = document.querySelector('div.linkbox');
 
