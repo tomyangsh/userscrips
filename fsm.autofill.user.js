@@ -9,9 +9,9 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.2
+// @version     2.2.1
 // @author      大統領
-// @description 馒头/emp 一键转种至 fsm
+// @description 馒头/emp/pb/ptt 一键转种至 fsm
 // ==/UserScript==
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
