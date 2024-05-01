@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://pornbay.org/torrents.php?id=*
 // @match       https://www.empornium.*/torrents.php?id=*
 // @match       https://*.m-team.*/detail/*
 // @match       https://fsm.name/Torrents/new?autofill
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.0.2
+// @version     2.1
 // @author      大統領
 // @description 馒头/emp 一键转种至 fsm
 // ==/UserScript==
@@ -60,10 +61,40 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
-  case 'empornium':
+  case 'pornbay': {
     const link_box = document.querySelector('div.linkbox');
 
-    function collect_data_emp() {
+    function collect_data() {
+      let title = document.querySelector('h2').innerText;
+      let info_node = document.querySelector('div.body');
+      let img_list = []
+
+      img_list.push(document.querySelector('#coverimage img').src);
+      info_node.querySelectorAll('img').forEach(node => {
+        if (node.src.match(/https:\/\/\w+\.empornium\.\w+\/images/)) {
+          img_src = node.src.replace(/\.(th|md)(\.\w+)$/, '$2');
+          img_list.push(img_src);
+        } else if (node.src.match(/pstorage\.space/)) {img_list.push(node.src)}
+      });
+
+      let tag = document.querySelector('td.cats_col div').title;
+      let upload_info = {
+        "title": title,
+        "img_list": img_list,
+        "tag": tag
+      }
+      GM_setValue("upload_info", upload_info);
+    }
+
+    const fsm_link = create_link(collect_data);
+    link_box.append(fsm_link);
+
+    break;
+  }
+  case 'empornium': {
+    const link_box = document.querySelector('div.linkbox');
+
+    function collect_data() {
       let title = document.querySelector('h2').innerText;
       let info_node = document.querySelector('div.body');
       let img_list = []
@@ -71,7 +102,7 @@ switch (HOST) {
       img_list.push(document.querySelector('#coverimage img').onclick.toString().match(/'(.+)'/)[1]);
       info_node.querySelectorAll('img').forEach(node => {
         if (node.src.match(/https:\/\/\w+\.empornium\.\w+\/images/)) {
-          img_src = node.src.replace(/\.th(\.\w+)$/, '$1');
+          img_src = node.src.replace(/\.(th|md)(\.\w+)$/, '$2');
           img_list.push(img_src);
         }
       });
@@ -85,11 +116,12 @@ switch (HOST) {
       GM_setValue("upload_info", upload_info);
     }
 
-    const fsm_link = create_link(collect_data_emp);
+    const fsm_link = create_link(collect_data);
     link_box.append(fsm_link);
 
     break;
-  case 'm-team':
+  }
+  case 'm-team': {
     function collect_data_mt() {
       const title = document.querySelector('h2 span').innerText;
       let subtitle = '';
@@ -143,7 +175,8 @@ switch (HOST) {
     add_observer(append_link);
 
     break;
-  case 'fsm':
+  }
+  case 'fsm': {
     function fill_info(mutations) {
       if (!document.querySelector('title').innerText.match('FSM')) {return;}
 
@@ -180,4 +213,5 @@ switch (HOST) {
     add_observer(fill_info);
 
     break;
+  }
 }
