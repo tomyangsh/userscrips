@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
-// @match       https://www.empornium.is/torrents.php?id=*
-// @match       https://kp.m-team.cc/detail/*
+// @match       https://www.empornium.*/torrents.php?id=*
+// @match       https://*.m-team.*/detail/*
 // @match       https://fsm.name/Torrents/new?autofill
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.0.1
+// @version     2.0.2
 // @author      大統領
 // @description 馒头/emp 一键转种至 fsm
 // ==/UserScript==
