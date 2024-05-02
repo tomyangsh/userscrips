@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://exoticaz.to/torrent/*
 // @match       https://www.pttime.org/details.php?id=*
 // @match       https://pornbay.org/torrents.php?id=*
 // @match       https://www.empornium.*/torrents.php?id=*
@@ -9,9 +10,9 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.2.1
+// @version     2.3
 // @author      大統領
-// @description 馒头/emp/pb/ptt 一键转种至 fsm
+// @description 馒头/emp/pb/ptt/exo 一键转种至 fsm
 // ==/UserScript==
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
@@ -62,6 +63,40 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
+  case 'exoticaz': {
+    const action_bar = document.querySelector('div.p-2 div.float-right');
+
+    function collect_data () {
+      const title = document.querySelector('h1').innerText;
+      const img_list = [];
+      const tags = [];
+
+      document.querySelectorAll('#TorrentDescription img').forEach(img => {
+        img_list.push(img.src);
+      })
+
+      document.querySelectorAll('#screenshots img').forEach(img => {
+        img_list.push(img.src);
+      })
+
+      document.querySelectorAll('div.tags a').forEach(a => {
+        tags.push(a.innerText);
+      })
+
+      const tag = tags.join();
+      const upload_info = {
+        "title": title,
+        "img_list": img_list,
+        "tag": tag
+      }
+      GM_setValue("upload_info", upload_info);
+    }
+
+    const fsm_link = create_link(collect_data);
+    action_bar.prepend(fsm_link);
+
+    break;
+  }
   case 'pttime': {
     let subtitle;
     let action_bar;
@@ -115,7 +150,7 @@ switch (HOST) {
       })
 
       const tag = tags.join();
-      let upload_info = {
+      const upload_info = {
         "title": title,
         "subtitle": subtitle,
         "img_list": img_list,
@@ -146,8 +181,8 @@ switch (HOST) {
         } else if (node.src.match(/pstorage\.space/)) {img_list.push(node.src)}
       });
 
-      let tag = document.querySelector('td.cats_col div').title;
-      let upload_info = {
+      const tag = document.querySelector('td.cats_col div').title;
+      const upload_info = {
         "title": title,
         "img_list": img_list,
         "tag": tag
@@ -176,8 +211,8 @@ switch (HOST) {
         }
       });
 
-      let tag = document.querySelector('div.cats_icon').title;
-      let upload_info = {
+      const tag = document.querySelector('div.cats_icon').title;
+      const upload_info = {
         "title": title,
         "img_list": img_list,
         "tag": tag
@@ -219,7 +254,7 @@ switch (HOST) {
         img_list.push(img.src);
       });
 
-      let upload_info = {
+      const upload_info = {
         "title": title,
         "subtitle": subtitle,
         "img_list": img_list,
