@@ -5,8 +5,9 @@
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @grant       GM.xmlHttpRequest
-// @version     1.8
+// @version     1.8.1
 // @description 补全中文标题，增加 IMDB 和豆瓣链接，一键复制 ptinfo
+// @icon        https://www.themoviedb.org/assets/2/apple-touch-icon-57ed4b3b0450fd5e9a0c20f34e814b82adaa1085c79bdde2f00ca8787b63d2c4.png
 // ==/UserScript==
 
 const social_links = document.querySelector("div.social_links");

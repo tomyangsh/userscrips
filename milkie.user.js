@@ -2,8 +2,9 @@
 // @name        milkie
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/*
-// @version     1.6.0
+// @version     1.6.1
 // @author      大統領
+// @icon        https://milkie.cc/favicon.png
 // ==/UserScript==
 
 function add_link(mutations) {

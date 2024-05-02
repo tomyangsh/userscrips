@@ -1,9 +1,10 @@
 // ==UserScript==
-// @name        二刺螈！滚粗克！！！
-// @namespace   https://github.com/tomyangsh/userscrips
-// @include       https://audiences.me/torrents.php*
-// @version     1.0
-// @author      大統領
+// @name            二刺螈！滚粗克！！！
+// @namespace       https://github.com/tomyangsh/userscrips
+// @include         https://audiences.me/torrents.php*
+// @version         1.0.1
+// @author          大統領
+// @icon            https://audiences.me/favicon.ico
 // ==/UserScript==
 
 function hide() {

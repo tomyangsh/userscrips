@@ -10,9 +10,10 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.3
+// @version     2.3.1
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo 一键转种至 fsm
+// @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
 // ==/UserScript==
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
