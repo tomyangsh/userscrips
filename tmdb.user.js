@@ -5,7 +5,7 @@
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @grant       GM.xmlHttpRequest
-// @version     1.8.1
+// @version     1.8.2
 // @description 补全中文标题，增加 IMDB 和豆瓣链接，一键复制 ptinfo
 // @icon        https://www.themoviedb.org/assets/2/apple-touch-icon-57ed4b3b0450fd5e9a0c20f34e814b82adaa1085c79bdde2f00ca8787b63d2c4.png
 // ==/UserScript==
@@ -30,6 +30,23 @@ function appendDoubanLink(imdb_id) {
         douban_link.style = "width: 30px;";
         const douban_icon = douban_link.appendChild(document.createElement("img"));
         douban_icon.src = "https://www.douban.com/favicon.ico";
+      } else {
+        GM.xmlHttpRequest({
+          method: "GET",
+          url: `https://query.wikidata.org/sparql?format=json&query=SELECT%20*%20WHERE%20{?s%20wdt:P345%20%22${imdb_id}%22.%20OPTIONAL%20{%20?s%20wdt:P4529%20?Douban_film_ID.%20}}`,
+          responseType: 'json',
+          onload: res => {
+            if (res.response.results.bindings.length) {
+              const douban_id = res.response.bindings[0].Douban_film_ID.value;
+              const douban_link = social_links.appendChild(document.createElement("a"));
+              douban_link.href = `https://movie.douban.com/subject/${douban_id}/`;
+              douban_link.target = "_blank";
+              douban_link.style = "width: 30px;";
+              const douban_icon = douban_link.appendChild(document.createElement("img"));
+              douban_icon.src = "https://www.douban.com/favicon.ico";
+            }
+          }
+        })
       }
     }
   });
