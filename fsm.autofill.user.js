@@ -12,7 +12,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.4
+// @version     2.4.1
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -92,9 +92,9 @@ switch (HOST) {
           } else if (attribute.match('有码')) {
             tags.push('有码')
           }
-          if (attribute.match('男娘')) {
-            tags.push('男娘')
-          }
+
+          const category = attribute.match(/类型:\s(\S+)/)[1];
+          tags.push(category);
 
           break;
         }
