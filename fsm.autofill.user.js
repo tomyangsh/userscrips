@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://kufirc.com/torrents.php?id=*
 // @match       https://kamept.com/details.php?id=*
 // @match       https://exoticaz.to/torrent/*
 // @match       https://www.pttime.org/details.php?id=*
@@ -12,7 +13,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.4.1
+// @version     2.5
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -66,6 +67,34 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
+  case 'kufirc': {
+    const link_box = document.querySelector('div.linkbox');
+
+    function collect_data() {
+      let title = document.querySelector('h2').innerText;
+      let info_node = document.querySelector('div.body');
+      let img_list = []
+
+      img_list.push(document.querySelector('#coverimage img').src);
+      info_node.querySelectorAll('img').forEach(node => {
+        img_src = node.src.replace(/\.(th|md)(\.\w+)$/, '$2');
+        img_list.push(img_src);
+      });
+
+      const tag = document.querySelector('td.cats_col div').title;
+      const upload_info = {
+        "title": title,
+        "img_list": img_list,
+        "tag": tag
+      }
+      GM_setValue("upload_info", upload_info);
+    }
+
+    const fsm_link = create_link(collect_data);
+    link_box.append(fsm_link);
+
+    break;
+  }
   case 'kamept': {
     let subtitle;
     let action_bar;
