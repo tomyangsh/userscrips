@@ -13,7 +13,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.5.1
+// @version     2.5.2
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo/kamept/kufirc 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -21,7 +21,7 @@
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
 
-function upload_img(img_node) {
+function upload_img(img_node, referer) {
   const source_url = img_node.src;
   img_node.alt = "加载中，请稍候。。。。";
 
@@ -29,6 +29,9 @@ function upload_img(img_node) {
     url: source_url,
     method: "GET",
     responseType: 'blob',
+    headers: {
+      'Referer': referer
+    },
     onload: res => {
       const form_data = new FormData();
       form_data.append("file", res.response, img_node.src.match(/\w+\.\w+$/)[0]);
@@ -403,7 +406,8 @@ switch (HOST) {
         let img_node = document.createElement('img');
         img_node.src = img_url;
         img_node.onerror = function() {
-          upload_img(this);
+          const referer = new URL(img_url).host
+          upload_img(this, referer);
         }
 
         editor.append(img_node);
