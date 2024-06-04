@@ -2,17 +2,17 @@
 // @name            二刺螈！滚粗克！！！
 // @namespace       https://github.com/tomyangsh/userscrips
 // @include         https://audiences.me/torrents.php*
-// @version         1.0.1
+// @version         1.0.2
 // @author          大統領
 // @icon            https://audiences.me/favicon.ico
 // ==/UserScript==
 
 function hide() {
-  document.querySelector('#torrenttable').querySelectorAll(':scope > tbody > tr').forEach(function hide(node) {
+  document.querySelectorAll('#torrenttable tr').forEach(node => {
     if (node.querySelector('.tdh')) {
-        node.setAttribute("hidden", "hidden");
-        }
-  });
+      node.setAttribute("hidden", "hidden");
+    }
+  })
 }
 
 function unhide() {
