@@ -2,7 +2,7 @@
 // @name        milkie
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://milkie.cc/*
-// @version     1.6.1
+// @version     1.7.0
 // @author      大統領
 // @icon        https://milkie.cc/favicon.png
 // ==/UserScript==
@@ -28,7 +28,7 @@ function add_link(mutations) {
       var album = nfo.match(/(album|title)[^\w]+(.+\w)/i)[2].replace(' EP', '');
       var music_query = `${artist} ${album}`;
       var link_innerText = 'Search RED';
-      var link_href = `https://redacted.ch/torrents.php?searchstr=${music_query}`;
+      var link_href = `https://redacted.ch/log.php?search=${music_query}`;
       observer.observe(info_box.childNodes[7], config_childList)
     } else if (['TV', 'Movie'].includes(category)) {
       var target_externals = document.querySelector('div.externals');
