@@ -13,7 +13,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.5.4
+// @version     2.6.0
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo/kamept/kufirc 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -21,9 +21,8 @@
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
 
-function upload_img(img_node, referer) {
-  const source_url = img_node.src;
-  img_node.alt = "加载中，请稍候。。。。";
+function upload_img(img_node, source_url) {
+  referer = source_url.match(/https?:\/\/.+?\//)[0];
 
   GM.xmlHttpRequest({
     url: source_url,
@@ -34,7 +33,7 @@ function upload_img(img_node, referer) {
     },
     onload: res => {
       const form_data = new FormData();
-      form_data.append("file", res.response, img_node.src.match(/\w+\.\w+$/)[0]);
+      form_data.append("file", res.response, source_url.match(/\w+\.\w+$/)[0]);
 
       GM.xmlHttpRequest({
         url: "https://fsm.name/api/PicUpload/upload",
@@ -152,8 +151,7 @@ switch (HOST) {
         "title": title,
         "subtitle": subtitle,
         "img_list": img_list,
-        "tag": tag,
-        "referer": "https://kamept.com/"
+        "tag": tag
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -316,8 +314,7 @@ switch (HOST) {
       const upload_info = {
         "title": title,
         "img_list": img_list,
-        "tag": tag,
-        "referer": "https://www.empornium.is/"
+        "tag": tag
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -360,8 +357,7 @@ switch (HOST) {
         "title": title,
         "subtitle": subtitle,
         "img_list": img_list,
-        "tag": tag,
-        "referer": "https://kp.m-team.cc/"
+        "tag": tag
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -407,10 +403,8 @@ switch (HOST) {
 
       for (img_url of upload_info.img_list) {
         let img_node = document.createElement('img');
-        img_node.src = img_url;
-        img_node.onerror = function() {
-          upload_img(this, upload_info.referer);
-        }
+        img_node.alt = "加载中，请稍候。。。。";
+        upload_img(img_node, img_url);
 
         editor.append(img_node);
       }
