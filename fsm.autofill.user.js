@@ -13,7 +13,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.5.3
+// @version     2.5.4
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo/kamept/kufirc 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -152,7 +152,8 @@ switch (HOST) {
         "title": title,
         "subtitle": subtitle,
         "img_list": img_list,
-        "tag": tag
+        "tag": tag,
+        "referer": "https://kamept.com/"
       }
       GM_setValue("upload_info", upload_info);
     }
