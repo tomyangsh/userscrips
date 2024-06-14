@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://bitporn.eu/details.php?id=*
 // @match       https://kufirc.com/torrents.php?id=*
 // @match       https://kamept.com/details.php?id=*
 // @match       https://exoticaz.to/torrent/*
@@ -13,7 +14,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.6.1
+// @version     2.7
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo/kamept/kufirc 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -90,6 +91,51 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
+  case 'bitporn': {
+    let action_bar;
+    let tag;
+
+    document.querySelectorAll('td.rowhead').forEach(td => {
+      switch (td.innerText) {
+        case 'Basic Info': {
+          const attribute = td.nextElementSibling.innerText;
+          tag = attribute.match(/Type:\s(\w+)/)[1];
+
+          break;
+        }
+        case 'Action': {
+          action_bar = td.nextElementSibling;
+
+          break;
+        }
+      }
+    })
+
+    function collect_data () {
+      const title = document.querySelector('h1').firstChild.textContent;
+      const info_node = document.querySelector('#kdescr');
+      const img_list = [];
+
+      info_node.querySelectorAll('img').forEach(img => {
+        img_list.push(img.src);
+      })
+
+      const torrent_url = document.querySelector('a.index').href;
+      const upload_info = {
+        "title": title,
+        "img_list": img_list,
+        "tag": tag,
+        "torrent_url": torrent_url
+      }
+      GM_setValue("upload_info", upload_info);
+    }
+
+    const fsm_link = create_link(collect_data);
+    action_bar.append(' | ');
+    action_bar.append(fsm_link);
+
+    break;
+  }
   case 'kufirc': {
     const link_box = document.querySelector('div.linkbox');
 
