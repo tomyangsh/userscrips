@@ -13,13 +13,34 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.6.0
+// @version     2.6.1
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo/kamept/kufirc 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
 // ==/UserScript==
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
+
+function load_torrent(url, name, upload_data) {
+  name = name + '.torrent';
+
+  GM.xmlHttpRequest({
+    url: url,
+    method: "GET",
+    responseType: 'blob',
+    onload: res => {
+      const torrent_file = new window.File([res.response], name, { type: "application/x-bittorrent" });
+      upload_data.torrentFile[0] = {
+        name: name,
+        raw: torrent_file
+      };
+    },
+    onerror: res => {
+      console.log(res);
+      alert("加载种子失败，可能是你点得太快了！");
+    }
+  })
+}
 
 function upload_img(img_node, source_url) {
   referer = source_url.match(/https?:\/\/.+?\//)[0];
@@ -84,10 +105,12 @@ switch (HOST) {
       });
 
       const tag = document.querySelector('td.cats_col div').title;
+      const torrent_url = document.querySelector('a.blueButton').href;
       const upload_info = {
         "title": title,
         "img_list": img_list,
-        "tag": tag
+        "tag": tag,
+        "torrent_url": torrent_url
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -147,11 +170,13 @@ switch (HOST) {
       })
 
       const tag = tags.join();
+      const torrent_url = document.querySelector('a.index').href;
       const upload_info = {
         "title": title,
         "subtitle": subtitle,
         "img_list": img_list,
-        "tag": tag
+        "tag": tag,
+        "torrent_url": torrent_url
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -183,10 +208,12 @@ switch (HOST) {
       })
 
       const tag = tags.join();
+      const torrent_url = document.querySelector('a.btn-xs').href;
       const upload_info = {
         "title": title,
         "img_list": img_list,
-        "tag": tag
+        "tag": tag,
+        "torrent_url": torrent_url
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -249,11 +276,13 @@ switch (HOST) {
       })
 
       const tag = tags.join();
+      const torrent_url = document.querySelector('a.index').href;
       const upload_info = {
         "title": title,
         "subtitle": subtitle,
         "img_list": img_list,
-        "tag": tag
+        "tag": tag,
+        "torrent_url": torrent_url
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -281,10 +310,12 @@ switch (HOST) {
       });
 
       const tag = document.querySelector('td.cats_col div').title;
+      const torrent_url = document.querySelector('a.blueButton').href;
       const upload_info = {
         "title": title,
         "img_list": img_list,
-        "tag": tag
+        "tag": tag,
+        "torrent_url": torrent_url
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -311,10 +342,12 @@ switch (HOST) {
       });
 
       const tag = document.querySelector('div.cats_icon').title;
+      const torrent_url = document.querySelector('a.blueButton').href;
       const upload_info = {
         "title": title,
         "img_list": img_list,
-        "tag": tag
+        "tag": tag,
+        "torrent_url": torrent_url
       }
       GM_setValue("upload_info", upload_info);
     }
@@ -407,6 +440,10 @@ switch (HOST) {
         upload_img(img_node, img_url);
 
         editor.append(img_node);
+      }
+
+      if (upload_info.torrent_url) {
+        load_torrent(upload_info.torrent_url, upload_info.title, upload_data);
       }
 
     }
