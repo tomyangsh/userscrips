@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://share.ilolicon.com/details.php?id=*
 // @match       https://bitporn.eu/details.php?id=*
 // @match       https://kufirc.com/torrents.php?id=*
 // @match       https://kamept.com/details.php?id=*
@@ -14,7 +15,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.7
+// @version     2.8
 // @author      大統領
 // @description 馒头/emp/pb/ptt/exo/kamept/kufirc 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -91,6 +92,60 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
+  case 'ilolicon': {
+    let subtitle;
+    let action_bar;
+    let tags = [];
+
+    document.querySelectorAll('td.rowhead').forEach(td => {
+      switch (td.innerText) {
+        case '标签': {
+          td.nextElementSibling.querySelectorAll('span').forEach(span => {
+            tags.push(span.innerText);
+          })
+
+          break;
+        }
+        case '副标题': {
+          subtitle = td.nextElementSibling.innerText;
+
+          break;
+        }
+        case '行为': {
+          action_bar = td.nextElementSibling;
+
+          break;
+        }
+      }
+    })
+
+    function collect_data () {
+      const title = document.querySelector('h1').firstChild.textContent;
+      const info_node = document.querySelector('#kdescr');
+      const img_list = [];
+
+      info_node.querySelectorAll('img').forEach(img => {
+        img_list.push(img.src);
+      })
+
+      const tag = tags.join();
+      const torrent_url = document.querySelector('a.index').href;
+      const upload_info = {
+        "title": title,
+        "subtitle": subtitle,
+        "img_list": img_list,
+        "tag": tag,
+        "torrent_url": torrent_url
+      }
+      GM_setValue("upload_info", upload_info);
+    }
+
+    const fsm_link = create_link(collect_data);
+    action_bar.append(' | ');
+    action_bar.append(fsm_link);
+
+    break;
+  }
   case 'bitporn': {
     let action_bar;
     let tag;
