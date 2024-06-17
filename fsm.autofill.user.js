@@ -16,9 +16,9 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.9.1
+// @version     2.9.2
 // @author      大統領
-// @description 一键转种至 fsm
+// @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
 // ==/UserScript==
 
