@@ -16,9 +16,9 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.9
+// @version     2.9.1
 // @author      大統領
-// @description 馒头/emp/pb/ptt/exo/kamept/kufirc 一键转种至 fsm
+// @description 一键转种至 fsm
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
 // ==/UserScript==
 
@@ -436,9 +436,7 @@ switch (HOST) {
       const img_list = [];
 
       info_node.querySelectorAll('img').forEach(img => {
-        if (img.src.match('attachments')) {
-          img_list.push(img.src);
-        }
+        img_list.push(img.src);
       })
 
       const tag = tags.join();
