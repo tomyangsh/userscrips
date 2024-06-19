@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://our.kelu.one/details.php?id=*
+// @match       https://www.nicept.net/details.php?id=*
 // @match       https://rousi.zip/details.php?id=*
 // @match       https://share.ilolicon.com/details.php?id=*
 // @match       https://bitporn.eu/details.php?id=*
@@ -9,20 +11,96 @@
 // @match       https://exoticaz.to/torrent/*
 // @match       https://www.pttime.org/details.php?id=*
 // @match       https://pornbay.org/torrents.php?id=*
-// @match       https://www.empornium.*/torrents.php?id=*
+// @match       https://www.empornium.is/torrents.php?id=*
+// @match       https://www.empornium.sx/torrents.php?id=*
 // @match       https://kp.m-team.cc/detail/*
 // @match       https://zp.m-team.io/detail/*
 // @match       https://fsm.name/Torrents/new?autofill
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.9.2
+// @version     2.10
 // @author      大統領
-// @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi
+// @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
 // ==/UserScript==
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
+
+function process_nexus() {
+  let subtitle;
+  let action_bar;
+  let tags = [];
+
+  document.querySelectorAll('td.rowhead').forEach(td => {
+    switch (td.innerText) {
+      case '资源标签':
+      case '標簽':
+      case '标签': {
+        td.nextElementSibling.querySelectorAll('span').forEach(span => {
+          tags.push(span.innerText);
+        })
+
+        break;
+      }
+      case '副標題':
+      case '副标题': {
+        subtitle = td.nextElementSibling.innerText;
+
+        break;
+      }
+      case '基本資訊':
+      case '基本信息': {
+        const attribute = td.nextElementSibling.innerText;
+        if (attribute.match('无码')) {
+          tags.push('无码');
+        } else if (attribute.match('有码')) {
+          tags.push('有码');
+        }
+
+        break;
+      }
+      case 'Basic Info': {
+        const type = td.nextElementSibling.innerText.match(/Type:\s(\w+)/)[1];
+        tags.push(type);
+
+        break;
+      }
+      case 'Action':
+      case '行為':
+      case '行为': {
+        action_bar = td.nextElementSibling;
+
+        break;
+      }
+    }
+  })
+
+  const fsm_link = create_link(function () {
+    const title = document.querySelector('h1').firstChild.textContent;
+    const info_node = document.querySelector('#kdescr');
+    const img_list = [];
+
+    info_node.querySelectorAll('img').forEach(img => {
+      image = img.src.replace('.thumb.jpg', '');
+      img_list.push(image);
+    })
+
+    const tag = tags.join();
+    const torrent_url = document.querySelector('a.index').href;
+    const upload_info = {
+      "title": title,
+      "subtitle": subtitle,
+      "img_list": img_list,
+      "tag": tag,
+      "torrent_url": torrent_url
+    }
+    GM_setValue("upload_info", upload_info);
+  })
+
+  action_bar.append(' | ');
+  action_bar.append(fsm_link);
+}
 
 function load_torrent(url, name, upload_data) {
   name = name + '.torrent';
@@ -93,169 +171,15 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
-  case 'rousi': {
-    let subtitle;
-    let action_bar;
-    let tags = [];
-
-    document.querySelectorAll('td.rowhead').forEach(td => {
-      switch (td.innerText) {
-        case '标签': {
-          td.nextElementSibling.querySelectorAll('span').forEach(span => {
-            tags.push(span.innerText);
-          })
-
-          break;
-        }
-        case '副标题': {
-          subtitle = td.nextElementSibling.innerText;
-
-          break;
-        }
-        case '基本信息': {
-          const attribute = td.nextElementSibling.innerText;
-          if (attribute.match('无码')) {
-            tags.push('无码')
-          } else if (attribute.match('有码')) {
-            tags.push('有码')
-          }
-
-          break;
-        }
-        case '行为': {
-          action_bar = td.nextElementSibling;
-
-          break;
-        }
-      }
-    })
-
-    function collect_data () {
-      const title = document.querySelector('h1').firstChild.textContent;
-      const info_node = document.querySelector('#kdescr');
-      const img_list = [];
-
-      info_node.querySelectorAll('img').forEach(img => {
-        img_list.push(img.src);
-      })
-
-      const tag = tags.join();
-      const torrent_url = document.querySelector('a.index').href;
-      const upload_info = {
-        "title": title,
-        "subtitle": subtitle,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    action_bar.append(' | ');
-    action_bar.append(fsm_link);
-
+  case 'kelu':
+  case 'nicept':
+  case 'rousi':
+  case 'ilolicon':
+  case 'bitporn':
+  case 'kamept':
+  case 'pttime':
+    process_nexus();
     break;
-  }
-  case 'ilolicon': {
-    let subtitle;
-    let action_bar;
-    let tags = [];
-
-    document.querySelectorAll('td.rowhead').forEach(td => {
-      switch (td.innerText) {
-        case '标签': {
-          td.nextElementSibling.querySelectorAll('span').forEach(span => {
-            tags.push(span.innerText);
-          })
-
-          break;
-        }
-        case '副标题': {
-          subtitle = td.nextElementSibling.innerText;
-
-          break;
-        }
-        case '行为': {
-          action_bar = td.nextElementSibling;
-
-          break;
-        }
-      }
-    })
-
-    function collect_data () {
-      const title = document.querySelector('h1').firstChild.textContent;
-      const info_node = document.querySelector('#kdescr');
-      const img_list = [];
-
-      info_node.querySelectorAll('img').forEach(img => {
-        img_list.push(img.src);
-      })
-
-      const tag = tags.join();
-      const torrent_url = document.querySelector('a.index').href;
-      const upload_info = {
-        "title": title,
-        "subtitle": subtitle,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    action_bar.append(' | ');
-    action_bar.append(fsm_link);
-
-    break;
-  }
-  case 'bitporn': {
-    let action_bar;
-    let tag;
-
-    document.querySelectorAll('td.rowhead').forEach(td => {
-      switch (td.innerText) {
-        case 'Basic Info': {
-          const attribute = td.nextElementSibling.innerText;
-          tag = attribute.match(/Type:\s(\w+)/)[1];
-
-          break;
-        }
-        case 'Action': {
-          action_bar = td.nextElementSibling;
-
-          break;
-        }
-      }
-    })
-
-    function collect_data () {
-      const title = document.querySelector('h1').firstChild.textContent;
-      const info_node = document.querySelector('#kdescr');
-      const img_list = [];
-
-      info_node.querySelectorAll('img').forEach(img => {
-        img_list.push(img.src);
-      })
-
-      const torrent_url = document.querySelector('a.index').href;
-      const upload_info = {
-        "title": title,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    action_bar.append(' | ');
-    action_bar.append(fsm_link);
-
-    break;
-  }
   case 'kufirc': {
     const link_box = document.querySelector('div.linkbox');
 
@@ -283,73 +207,6 @@ switch (HOST) {
 
     const fsm_link = create_link(collect_data);
     link_box.append(fsm_link);
-
-    break;
-  }
-  case 'kamept': {
-    let subtitle;
-    let action_bar;
-    let tags = [];
-
-    document.querySelectorAll('td.rowhead').forEach(td => {
-      switch (td.innerText) {
-        case '标签': {
-          td.nextElementSibling.querySelectorAll('span').forEach(span => {
-            tags.push(span.innerText);
-          })
-
-          break;
-        }
-        case '副标题': {
-          subtitle = td.nextElementSibling.innerText;
-
-          break;
-        }
-        case '基本信息': {
-          const attribute = td.nextElementSibling.innerText;
-          if (attribute.match('无码')) {
-            tags.push('无码')
-          } else if (attribute.match('有码')) {
-            tags.push('有码')
-          }
-
-          const category = attribute.match(/类型:\s(\S+)/)[1];
-          tags.push(category);
-
-          break;
-        }
-        case '行为': {
-          action_bar = td.nextElementSibling;
-
-          break;
-        }
-      }
-    })
-
-    function collect_data () {
-      const title = document.querySelector('h1').firstChild.textContent;
-      const info_node = document.querySelector('#kdescr');
-      const img_list = [];
-
-      info_node.querySelectorAll('img').forEach(img => {
-        img_list.push(img.src);
-      })
-
-      const tag = tags.join();
-      const torrent_url = document.querySelector('a.index').href;
-      const upload_info = {
-        "title": title,
-        "subtitle": subtitle,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    action_bar.append(' | ');
-    action_bar.append(fsm_link);
 
     break;
   }
@@ -386,74 +243,6 @@ switch (HOST) {
 
     const fsm_link = create_link(collect_data);
     action_bar.prepend(fsm_link);
-
-    break;
-  }
-  case 'pttime': {
-    let subtitle;
-    let action_bar;
-    let tags = [];
-
-    document.querySelectorAll('td.rowhead').forEach(td => {
-      switch (td.innerText) {
-        case '资源标签': {
-          td.nextElementSibling.querySelectorAll('span').forEach(span => {
-            tags.push(span.innerText);
-          })
-
-          break;
-        }
-        case '副标题': {
-          subtitle = td.nextElementSibling.innerText;
-
-          break;
-        }
-        case '基本信息': {
-          const attribute = td.nextElementSibling.innerText;
-          if (attribute.match('无码')) {
-            tags.push('无码')
-          } else if (attribute.match('有码')) {
-            tags.push('有码')
-          } else if (attribute.match('写真')) {
-            tags.push('写真')
-          } else if (attribute.match('综艺')) {
-            tags.push('综艺')
-          }
-
-          break;
-        }
-        case '行为': {
-          action_bar = td.nextElementSibling;
-
-          break;
-        }
-      }
-    })
-
-    function collect_data () {
-      const title = document.querySelector('h1').firstChild.textContent;
-      const info_node = document.querySelector('#kdescr');
-      const img_list = [];
-
-      info_node.querySelectorAll('img').forEach(img => {
-        img_list.push(img.src);
-      })
-
-      const tag = tags.join();
-      const torrent_url = document.querySelector('a.index').href;
-      const upload_info = {
-        "title": title,
-        "subtitle": subtitle,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    action_bar.append(' | ');
-    action_bar.append(fsm_link);
 
     break;
   }
