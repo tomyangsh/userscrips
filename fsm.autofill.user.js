@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name        一键转种至 fsm
 // @namespace   https://github.com/tomyangsh/userscrips
+// @match       https://www.happyfappy.org/torrents.php?id=*
 // @match       https://our.kelu.one/details.php?id=*
 // @match       https://www.nicept.net/details.php?id=*
 // @match       https://rousi.zip/details.php?id=*
@@ -19,9 +20,9 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.10
+// @version     2.11
 // @author      大統領
-// @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu
+// @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
 // ==/UserScript==
 
@@ -171,6 +172,35 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
+  case 'happyfappy': {
+    const link_box = document.querySelector('div.linkbox');
+
+    function collect_data() {
+      let title = document.querySelector('h2').innerText;
+      let info_node = document.querySelector('#descbox');
+      let img_list = []
+
+      img_list.push(document.querySelector('#coverimage img').src);
+      info_node.querySelectorAll('img').forEach(node => {
+        img_list.push(node.src);
+      });
+
+      const tag = document.querySelector('td.cats_col div').title;
+      const torrent_url = document.querySelector('a.blueButton').href;
+      const upload_info = {
+        "title": title,
+        "img_list": img_list,
+        "tag": tag,
+        "torrent_url": torrent_url
+      }
+      GM_setValue("upload_info", upload_info);
+    }
+
+    const fsm_link = create_link(collect_data);
+    link_box.append(fsm_link);
+
+    break;
+  }
   case 'kelu':
   case 'nicept':
   case 'rousi':
