@@ -20,7 +20,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.1
+// @version     2.11.2
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -336,11 +336,11 @@ switch (HOST) {
 
         editor.append(img_node);
       }
-
+/*
       if (upload_info.torrent_url) {
         load_torrent(upload_info.torrent_url, upload_info.title, upload_data);
       }
-
+*/
     }
 
     add_observer(fill_info);
