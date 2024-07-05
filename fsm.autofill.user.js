@@ -20,13 +20,42 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11
+// @version     2.11.1
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
 // ==/UserScript==
 
 const HOST = document.location.host.match(/([^.]+)\.\w+$/)[1];
+
+function process_luminance() {
+  const link_box = document.querySelector('div.linkbox');
+
+  const fsm_link = create_link(function () {
+    let title = document.querySelector('h2').innerText;
+    let info_node = document.querySelector('#descbox');
+    let img_list = []
+
+    image_cover = document.querySelector('#coverimage img').src.replace('resize/250/', '');
+    img_list.push(image_cover);
+    info_node.querySelectorAll('img').forEach(node => {
+      image = node.src.replace(/\.(th|md)(\.\w+)$/, '$2');
+      img_list.push(image);
+    });
+
+    const tag = document.querySelector('td.cats_col div').title;
+    const torrent_url = document.querySelector('a.blueButton').href;
+    const upload_info = {
+      "title": title,
+      "img_list": img_list,
+      "tag": tag,
+      "torrent_url": torrent_url
+    }
+    GM_setValue("upload_info", upload_info);
+  })
+
+  link_box.append(fsm_link);
+}
 
 function process_nexus() {
   let subtitle;
@@ -172,35 +201,12 @@ function create_link(collect_data) {
 }
 
 switch (HOST) {
-  case 'happyfappy': {
-    const link_box = document.querySelector('div.linkbox');
-
-    function collect_data() {
-      let title = document.querySelector('h2').innerText;
-      let info_node = document.querySelector('#descbox');
-      let img_list = []
-
-      img_list.push(document.querySelector('#coverimage img').src);
-      info_node.querySelectorAll('img').forEach(node => {
-        img_list.push(node.src);
-      });
-
-      const tag = document.querySelector('td.cats_col div').title;
-      const torrent_url = document.querySelector('a.blueButton').href;
-      const upload_info = {
-        "title": title,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    link_box.append(fsm_link);
-
+  case 'happyfappy':
+  case 'kufirc':
+  case 'pornbay':
+  case 'empornium':
+    process_luminance();
     break;
-  }
   case 'kelu':
   case 'nicept':
   case 'rousi':
@@ -210,36 +216,6 @@ switch (HOST) {
   case 'pttime':
     process_nexus();
     break;
-  case 'kufirc': {
-    const link_box = document.querySelector('div.linkbox');
-
-    function collect_data() {
-      let title = document.querySelector('h2').innerText;
-      let info_node = document.querySelector('div.body');
-      let img_list = []
-
-      img_list.push(document.querySelector('#coverimage img').src);
-      info_node.querySelectorAll('img').forEach(node => {
-        img_src = node.src.replace(/\.(th|md)(\.\w+)$/, '$2');
-        img_list.push(img_src);
-      });
-
-      const tag = document.querySelector('td.cats_col div').title;
-      const torrent_url = document.querySelector('a.blueButton').href;
-      const upload_info = {
-        "title": title,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    link_box.append(fsm_link);
-
-    break;
-  }
   case 'exoticaz': {
     const action_bar = document.querySelector('div.p-2 div.float-right');
 
@@ -273,70 +249,6 @@ switch (HOST) {
 
     const fsm_link = create_link(collect_data);
     action_bar.prepend(fsm_link);
-
-    break;
-  }
-  case 'pornbay': {
-    const link_box = document.querySelector('div.linkbox');
-
-    function collect_data() {
-      let title = document.querySelector('h2').innerText;
-      let info_node = document.querySelector('div.body');
-      let img_list = []
-
-      img_list.push(document.querySelector('#coverimage img').src);
-      info_node.querySelectorAll('img').forEach(node => {
-        if (node.src.match(/https:\/\/\w+\.empornium\.\w+\/images/)) {
-          img_src = node.src.replace(/\.(th|md)(\.\w+)$/, '$2');
-          img_list.push(img_src);
-        } else if (node.src.match(/pstorage\.space/)) {img_list.push(node.src)}
-      });
-
-      const tag = document.querySelector('td.cats_col div').title;
-      const torrent_url = document.querySelector('a.blueButton').href;
-      const upload_info = {
-        "title": title,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    link_box.append(fsm_link);
-
-    break;
-  }
-  case 'empornium': {
-    const link_box = document.querySelector('div.linkbox');
-
-    function collect_data() {
-      let title = document.querySelector('h2').innerText;
-      let info_node = document.querySelector('div.body');
-      let img_list = []
-
-      img_list.push(document.querySelector('#coverimage img').onclick.toString().match(/'(.+)'/)[1]);
-      info_node.querySelectorAll('img').forEach(node => {
-        if (node.src.match(/https:\/\/\w+\.empornium\.\w+\/images/)) {
-          img_src = node.src.replace(/\.(th|md)(\.\w+)$/, '$2');
-          img_list.push(img_src);
-        }
-      });
-
-      const tag = document.querySelector('div.cats_icon').title;
-      const torrent_url = document.querySelector('a.blueButton').href;
-      const upload_info = {
-        "title": title,
-        "img_list": img_list,
-        "tag": tag,
-        "torrent_url": torrent_url
-      }
-      GM_setValue("upload_info", upload_info);
-    }
-
-    const fsm_link = create_link(collect_data);
-    link_box.append(fsm_link);
 
     break;
   }
