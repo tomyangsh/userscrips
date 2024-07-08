@@ -20,7 +20,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.2
+// @version     2.11.3
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -197,6 +197,8 @@ function create_link(collect_data) {
     window.open(url_autofill, '_blank').focus();
   }
 
+  GM_setValue("source_url", document.location.href);
+
   return fsm_link;
 }
 
@@ -322,6 +324,8 @@ switch (HOST) {
       upload_data.title = upload_info.title;
       document.querySelectorAll('label')[2].control.value = upload_info.tag;
       upload_data.tag = upload_info.tag;
+      document.querySelectorAll('label')[3].control.value = GM_getValue("source_url");
+      upload_data.refer = GM_getValue("source_url");
 
       if (upload_info.subtitle) {
         subtitle_node = document.createElement('p');
