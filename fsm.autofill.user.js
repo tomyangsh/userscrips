@@ -20,7 +20,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.3
+// @version     2.11.4
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -132,19 +132,19 @@ function process_nexus() {
   action_bar.append(fsm_link);
 }
 
-function load_torrent(url, name, upload_data) {
-  name = name + '.torrent';
-
+function load_torrent(url) {
   GM.xmlHttpRequest({
     url: url,
     method: "GET",
     responseType: 'blob',
     onload: res => {
-      const torrent_file = new window.File([res.response], name, { type: "application/x-bittorrent" });
-      upload_data.torrentFile[0] = {
-        name: name,
-        raw: torrent_file
-      };
+      const torrent_file = new window.File([res.response], 'file.torrent', { type: "application/x-bittorrent" });
+      const container = new DataTransfer();
+      container.items.add(torrent_file);
+
+      input_file = document.querySelector('input.el-upload__input');
+      input_file.files = container.files;
+      input_file.dispatchEvent(new Event('change'));
     },
     onerror: res => {
       console.log(res);
@@ -315,17 +315,21 @@ switch (HOST) {
 
       const editor = document.querySelector('div.ql-editor');
       const upload_info = GM_getValue("upload_info");
-      const upload_data = app.__vue_app__.config.globalProperties.$route.matched[0].instances.default._.data;
       const note_node = document.createElement('div');
       note_node.innerText = "请等待下方图片全部加载完成后再点击发布！记得删去不必要的图片，及拖动改变顺序，第一张图片会用作封面";
       editor.parentNode.parentNode.parentNode.prepend(note_node);
 
-      document.querySelectorAll('label')[1].control.value = upload_info.title;
-      upload_data.title = upload_info.title;
-      document.querySelectorAll('label')[2].control.value = upload_info.tag;
-      upload_data.tag = upload_info.tag;
-      document.querySelectorAll('label')[3].control.value = GM_getValue("source_url");
-      upload_data.refer = GM_getValue("source_url");
+      input_title = document.querySelectorAll('label')[1].control;
+      input_title.value = upload_info.title;
+      input_title.dispatchEvent(new Event('input'));
+
+      input_tag = document.querySelectorAll('label')[2].control;
+      input_tag.value = upload_info.tag;
+      input_tag.dispatchEvent(new Event('input'));
+
+      input_source = document.querySelectorAll('label')[3].control;
+      input_source.value = GM_getValue("source_url");
+      input_source.dispatchEvent(new Event('input'));
 
       if (upload_info.subtitle) {
         subtitle_node = document.createElement('p');
@@ -340,11 +344,11 @@ switch (HOST) {
 
         editor.append(img_node);
       }
-/*
+
       if (upload_info.torrent_url) {
-        load_torrent(upload_info.torrent_url, upload_info.title, upload_data);
+        load_torrent(upload_info.torrent_url);
       }
-*/
+
     }
 
     add_observer(fill_info);
