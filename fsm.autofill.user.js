@@ -20,7 +20,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.4
+// @version     2.11.5
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -255,7 +255,8 @@ switch (HOST) {
     break;
   }
   case 'm-team': {
-    function collect_data_mt() {
+    function append_link() {
+      const fsm_link = create_link(function () {
       const title = document.querySelector('h2 span').innerText;
       let subtitle = '';
       let img_list = [];
@@ -283,17 +284,35 @@ switch (HOST) {
         img_list.push(img.src);
       });
 
-      const upload_info = {
-        "title": title,
-        "subtitle": subtitle,
-        "img_list": img_list,
-        "tag": tag
-      }
-      GM_setValue("upload_info", upload_info);
-    }
+      torrent_id = document.location.href.match(/\d+/)[0];
+      const form_data = new FormData();
+      form_data.append("id", torrent_id)
 
-    function append_link() {
-      const fsm_link = create_link(collect_data_mt);
+      GM.xmlHttpRequest({
+        url: 'https://api.m-team.cc/api/torrent/genDlToken',
+        method: 'POST',
+        responseType: 'json',
+        data: form_data,
+        headers: {
+          "authorization": localStorage.getItem('auth')
+        },
+        synchronous: false,
+        onload: res => {
+          console.log(res);
+          const torrent_url = res.response.data;
+
+          const upload_info = {
+            "title": title,
+            "subtitle": subtitle,
+            "img_list": img_list,
+            "tag": tag,
+            "torrent_url": torrent_url
+          }
+          GM_setValue("upload_info", upload_info);
+        }
+      })
+    })
+
       let action_bar;
 
       document.querySelectorAll('span').forEach(node => {
