@@ -20,7 +20,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.5
+// @version     2.11.6
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -260,25 +260,44 @@ switch (HOST) {
       const title = document.querySelector('h2 span').innerText;
       let subtitle = '';
       let img_list = [];
-      let tag = '';
+      let tags = [];
 
-      document.querySelectorAll('span').forEach(node => {
-        if (node.innerText == '副標題') {
-          subtitle = node.parentNode.nextSibling.innerText;
-        } else if (node.innerText.match('無碼')) {
-          tag = '无码';
-        } else if (node.innerText.match('有碼')) {
-          tag = '有码';
-        } else if (node.innerText.match('寫真')) {
-          tag = '写真';
-        } else if (node.innerText.match('遊戲')) {
-          tag = '黄油';
-        } else if (node.innerText.match('漫畫')) {
-          tag = '漫画';
-        } else if (node.innerText.match('動畫')) {
-          tag = '动画';
+      document.querySelectorAll('th.ant-descriptions-item-label').forEach(th => {
+        switch (th.innerText) {
+          case '副標題': {
+            subtitle = th.nextSibling.innerText;
+
+            break;
+          }
+          case 'Tag': {
+            th.nextSibling.querySelectorAll('span div div').forEach(tag_node => {
+              tags.push(tag_node.innerText);
+            })
+
+            break;
+          }
+          case '基本資訊': {
+            const attribute = th.nextSibling.innerText;
+            if (attribute.match('無碼')) {
+              tags.push('无码');
+            } else if (attribute.match('有碼')) {
+              tags.push('有码');
+            } else if (attribute.match('寫真')) {
+              tags.push('写真');
+            } else if (attribute.match('遊戲')) {
+              tags.push('黄油');
+            } else if (attribute.match('漫畫')) {
+              tags.push('漫画');
+            } else if (attribute.match('動畫')) {
+              tags.push('动画');
+            }
+
+            break;
+          }
         }
       });
+
+        tag = tags.join();
 
       document.querySelectorAll('.braft-output-content img').forEach(img => {
         img_list.push(img.src);
