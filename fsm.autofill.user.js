@@ -20,7 +20,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.6
+// @version     2.11.7
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -153,7 +153,7 @@ function load_torrent(url) {
   })
 }
 
-function upload_img(img_node, source_url) {
+function upload_img(source_url) {
   referer = source_url.match(/https?:\/\/.+?\//)[0];
 
   GM.xmlHttpRequest({
@@ -164,18 +164,13 @@ function upload_img(img_node, source_url) {
       'Referer': referer
     },
     onload: res => {
-      const form_data = new FormData();
-      form_data.append("file", res.response, source_url.match(/\w+\.\w+$/)[0]);
+      const image_file = new window.File([res.response], 'file.jpg');
+      const container = new DataTransfer();
+      container.items.add(image_file);
 
-      GM.xmlHttpRequest({
-        url: "https://fsm.name/api/PicUpload/upload",
-        method: "POST",
-        data: form_data,
-        responseType: 'json',
-        onload: res => {
-          img_node.src = res.response.data.url;
-        }
-      })
+      input_file = document.querySelectorAll('input.el-upload__input')[1];
+      input_file.files = container.files;
+      input_file.dispatchEvent(new Event('change'));
     }
   })
 }
@@ -354,7 +349,7 @@ switch (HOST) {
       const editor = document.querySelector('div.ql-editor');
       const upload_info = GM_getValue("upload_info");
       const note_node = document.createElement('div');
-      note_node.innerText = "请等待下方图片全部加载完成后再点击发布！记得删去不必要的图片，及拖动改变顺序，第一张图片会用作封面";
+      note_node.innerText = "请等待下方图片全部上传完成后再点击发布！记得删去不必要的图片，及拖动改变顺序，第一张图片会用作封面";
       editor.parentNode.parentNode.parentNode.prepend(note_node);
 
       input_title = document.querySelectorAll('label')[1].control;
@@ -376,11 +371,7 @@ switch (HOST) {
       }
 
       for (img_url of upload_info.img_list) {
-        let img_node = document.createElement('img');
-        img_node.alt = "加载中，请稍候。。。。";
-        upload_img(img_node, img_url);
-
-        editor.append(img_node);
+        upload_img(img_url);
       }
 
       if (upload_info.torrent_url) {
