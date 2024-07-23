@@ -16,11 +16,12 @@
 // @match       https://www.empornium.sx/torrents.php?id=*
 // @match       https://kp.m-team.cc/detail/*
 // @match       https://zp.m-team.io/detail/*
+// @match       https://xp.m-team.cc/detail/*
 // @match       https://fsm.name/Torrents/new?autofill
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.7
+// @version     2.11.8
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
