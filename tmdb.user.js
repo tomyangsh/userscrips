@@ -58,7 +58,7 @@ function appendDoubanLink(imdb_id) {
 
 GM.xmlHttpRequest({
   method: "GET",
-  url: `https://tomyangsh.pw/api/tmdb?cat=${cat}&id=${id}`,
+  url: `https://tomyangsh.us/api/tmdb?cat=${cat}&id=${id}`,
   onload: function(response) {
     const result = JSON.parse(response.responseText);
 

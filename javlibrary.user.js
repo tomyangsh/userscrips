@@ -99,7 +99,7 @@ xhr.onreadystatechange = function() {
     }
   }
 }
-let url = `https://tomyangsh.pw/api/dmm?keyword=${pid}`;
+let url = `https://tomyangsh.us/api/dmm?keyword=${pid}`;
 xhr.open("GET", url);
 xhr.send();
 
