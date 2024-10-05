@@ -3,7 +3,7 @@
 // @namespace   https://github.com/tomyangsh/userscrips
 // @match       https://www.themoviedb.org/person/*/edit*
 // @grant       GM.xmlHttpRequest
-// @version     1.0
+// @version     1.0.1
 // @author      大統領
 // @description 在编辑人物/创建 zh_CN 翻译时自动填写中文名
 // @icon        https://www.themoviedb.org/favicon.ico
@@ -17,9 +17,12 @@ GM.xmlHttpRequest({
   responseType: 'json',
   onload: res => {
     const results = res.response.results.bindings;
-    if (results.length) {
-      zh_name = results[0].itemLabel.value;
-      document.querySelector('#zh_CN_name').value = zh_name;
+    for (i of results) {
+      if (i.itemLabel["xml:lang"]) {
+        zh_name = i.itemLabel.value;
+        document.querySelector('#zh_CN_name').value = zh_name;
+        break;
+      }
     }
   }
 })
