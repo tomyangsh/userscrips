@@ -1,9 +1,11 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.3.4
+// @version     1.4.0
 // @include     *://www.javlibrary.com/*/?v=*
-// @grant    GM_addStyle
+// @grant       GM_addStyle
+// @grant       GM.xmlHttpRequest
+// @icon        https://www.javlibrary.com/favicon.ico
 // ==/UserScript==
 
 GM_addStyle ( `
@@ -80,28 +82,27 @@ document.querySelectorAll("div.previewthumbs a").forEach((i) => {
   }
 });
 
-let xhr  = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-  if (this.readyState == 4 & this.status == 200) {
-    let result = JSON.parse(this.responseText);
-    if (result.length && result[0].pid == pid) {
-      document.querySelector("#video_date table tr td.text").innerText = result[0].date;
-      if (result[0].preview) {
-        document.querySelectorAll("a.btn_videoplayer").forEach(i => i.remove());
-        button_preview = document.createElement("button");
-        button_preview.className = "smallbutton";
-        button_preview.src = result[0].preview;
-        button_preview.innerText = "Preview";
-        button_preview.onclick = float_video;
-        button_preview.style = "cursor: pointer; color: black;";
-        h3.append(button_preview);
+GM.xmlHttpRequest({
+    method: "GET",
+    url: `https://tomyangsh.us/api/dmm?query=${pid}`,
+    responseType: 'json',
+    onload: function(response) {
+      const result = response.response;
+      if (result) {
+        document.querySelector("#video_date table tr td.text").innerText = result.date;
+        if (result.preview) {
+          document.querySelectorAll("a.btn_videoplayer").forEach(i => i.remove());
+          button_preview = document.createElement("button");
+          button_preview.className = "smallbutton";
+          button_preview.src = result.preview;
+          button_preview.innerText = "Preview";
+          button_preview.onclick = float_video;
+          button_preview.style = "cursor: pointer; color: black;";
+          h3.append(button_preview);
+        }
       }
     }
-  }
-}
-let url = `https://tomyangsh.us/api/dmm?keyword=${pid}`;
-xhr.open("GET", url);
-xhr.send();
+})
 
 // title
 const h3 = document.querySelector("h3");

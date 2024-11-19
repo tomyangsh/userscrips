@@ -5,7 +5,7 @@
 // @include     /^https://www\.themoviedb\.org/movie/[0-9a-z-]+$/
 // @include     /^https://www\.themoviedb\.org/tv/[0-9a-z-]+$/
 // @grant       GM.xmlHttpRequest
-// @version     1.8.4
+// @version     1.9.0
 // @description 补全中文标题，增加 IMDB 和豆瓣链接，一键复制 ptinfo
 // @icon        https://www.themoviedb.org/assets/2/apple-touch-icon-57ed4b3b0450fd5e9a0c20f34e814b82adaa1085c79bdde2f00ca8787b63d2c4.png
 // ==/UserScript==
@@ -13,7 +13,7 @@
 const social_links = document.querySelector("div.social_links");
 
 const m = location.pathname.match(/\/(\w+)\/(\d+)/);
-const cat = m[1];
+const type = m[1];
 const id = m[2];
 
 function appendDoubanLink(imdb_id) {
@@ -58,7 +58,7 @@ function appendDoubanLink(imdb_id) {
 
 GM.xmlHttpRequest({
   method: "GET",
-  url: `https://tomyangsh.us/api/tmdb?cat=${cat}&id=${id}`,
+  url: `https://tomyangsh.us/api/tmdb?type=${type}&id=${id}`,
   onload: function(response) {
     const result = JSON.parse(response.responseText);
 
@@ -71,15 +71,17 @@ GM.xmlHttpRequest({
       title.style = "font-size: 30px;";
       if (!document.querySelector('p.wrap')) {
         const p_ori_name = document.createElement('p');
-        p_ori_name.appendChild(document.createElement('strong')).innerText = '原产地片名';
+        p_ori_name.appendChild(document.createElement('strong')).innerText = '原名';
         p_ori_name.append(result.ori_name);
         const section_facts = document.querySelector('section.facts');
         section_facts.insertBefore(p_ori_name, section_facts.querySelector('p'));
       }
     }
 
-    const des = result.des;
-    document.querySelector('div.overview').innerText = des.replace('\r', '\n\n');
+    const overview = result.overview;
+    if (overview) {
+      document.querySelector('div.overview').innerText = overview.replace('\r', '\n\n');
+    }
 
     const imdb_id = result.imdb;
 
@@ -93,7 +95,7 @@ GM.xmlHttpRequest({
       appendDoubanLink(imdb_id);
     }
 
-    const web_date = result.web_date
+    const web_date = result.web_date;
 
     if (web_date) {
       const web_date_span = document.querySelector('div.facts').appendChild(document.createElement("span"));
@@ -124,7 +126,7 @@ GM.xmlHttpRequest({
       '演员 ': castinfo.join('\n　　   ')
     }
 
-    poster = result.poster_main ? result.poster_main : result.poster;
+    poster = result.poster;
 
     var ptinfo = `[img]${poster}[/img]\n[size=3]\n[b]${result.name}`;
 
@@ -143,7 +145,7 @@ GM.xmlHttpRequest({
       ptinfo = ptinfo.replace('上映', '首播');
     }
 
-    ptinfo += `\n${result.des}\n[/size]`;
+    ptinfo += `\n${result.overview}\n[/size]`;
 
     const ptinfo_button = document.querySelector('h2').appendChild(document.createElement("button"))
     ptinfo_button.innerText = '复制ptinfo'
