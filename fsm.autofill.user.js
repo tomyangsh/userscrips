@@ -21,7 +21,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM.xmlHttpRequest
-// @version     2.11.8
+// @version     2.11.9
 // @author      大統領
 // @description 目前支持：馒头/emp/pb/ptt/exo/kamept/kufirc/bitporn/ilolicon/rousi/nicept/kelu/happyfappy
 // @icon        https://img.fsm.name/21/69/2169f715a4805d2643db30a4b8fd95d0.jpg
@@ -253,7 +253,7 @@ switch (HOST) {
   case 'm-team': {
     function append_link() {
       const fsm_link = create_link(function () {
-      const title = document.querySelector('h2 span').innerText;
+      const title = document.querySelector('h2 span.align-middle').innerText;
       let subtitle = '';
       let img_list = [];
       let tags = [];
@@ -309,7 +309,8 @@ switch (HOST) {
         responseType: 'json',
         data: form_data,
         headers: {
-          "authorization": localStorage.getItem('auth')
+          "authorization": localStorage.getItem('auth'),
+          "ts": Math.round(Date.now()/1000)
         },
         synchronous: false,
         onload: res => {
