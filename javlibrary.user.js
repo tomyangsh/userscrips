@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.4.0
+// @version     1.5.0
 // @include     *://www.javlibrary.com/*/?v=*
 // @grant       GM_addStyle
 // @grant       GM.xmlHttpRequest
@@ -97,6 +97,9 @@ GM.xmlHttpRequest({
           button_preview.src = result.preview;
           button_preview.innerText = "Preview";
           button_preview.onclick = float_video;
+          /*button_preview.onclick = function() {
+            window.open(result.preview, '_blank').focus();
+          }*/
           button_preview.style = "cursor: pointer; color: black;";
           h3.append(button_preview);
         }
@@ -133,10 +136,10 @@ mteam.href = `https://kp.m-team.cc/browse/adult?keyword=${pid}`;
 mteam.innerText = "M-Team";
 h3.append(mteam);
 
-// btn: FSM
+// btn: Picix
 var button_fsm = document.createElement("a");
 button_fsm.className = "smallbutton";
 button_fsm.target = "_blank";
-button_fsm.href = `https://fsm.name/Torrents?keyword=${pid}`;
-button_fsm.innerText = "FSM";
+button_fsm.href = `https://picix.us/Movies/Search?keyword=${pid}`;
+button_fsm.innerText = "Picix";
 h3.append(button_fsm);
