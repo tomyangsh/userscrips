@@ -5,7 +5,7 @@
 // @grant       GM_addStyle
 // @grant       GM.xmlHttpRequest
 // @icon        https://picix.us/favicon.ico
-// @version     1.0
+// @version     1.0.1
 // @author      大統領
 // @description 为 Picix 增加预览影片
 // ==/UserScript==
@@ -91,7 +91,8 @@ function add_preview(mutations) {
                     preview_button.src = result.preview;
                     preview_button.innerText = "预览";
                     preview_button.onclick = float_video;
-                    preview_button.style = "cursor: pointer; color: black; margin-left: 10px;";
+                    preview_button.className = "el-tag el-tag--primary"
+                    preview_button.style = "cursor: pointer; margin-top: -5px; margin-left: 10px;";
                     preview_span = document.createElement("span");
                     preview_span.append(preview_button);
                     document.querySelector('span.main-title-txt').parentNode.append(preview_span);
