@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        JAV Library Assistant
 // @namespace	  https://github.com/tomyangsh/userscrips
-// @version     1.5.1
+// @version     1.5.2
 // @include     *://www.javlibrary.com/*/?v=*
 // @grant       GM_addStyle
 // @grant       GM.xmlHttpRequest
@@ -88,7 +88,7 @@ GM.xmlHttpRequest({
     responseType: 'json',
     onload: function(response) {
       const result = response.response;
-      if (result) {
+      if (result.date) {
         document.querySelector("#video_date table tr td.text").innerText = result.date;
         if (result.preview) {
           document.querySelectorAll("a.btn_videoplayer").forEach(i => i.remove());
